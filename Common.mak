@@ -84,6 +84,10 @@ endif
 ifeq ($(PLATFORM),WII)
     EXESUFFIX := .elf
 endif
+ifeq ($(PLATFORM), SWITCH)
+    EXESUFFIX := .elf
+    DOLSUFFIX := .nro
+endif
 ifeq ($(PLATFORM),SKYOS)
     EXESUFFIX := .app
 endif
@@ -188,6 +192,31 @@ ifeq ($(PLATFORM),WII)
     CCFULLPATH = $(DEVKITPPC)/bin/$(CC)
 endif
 
+ifeq ($(PLATFORM),SWITCH)
+    APP_TITLE   :=  NXBlood
+    APP_AUTHOR  :=  Sentry/Jan200101
+    APP_VERSION :=  0.9.0
+    APP_ICON    :=  platform/Switch/icon.jpg
+
+    include $(DEVKITPRO)/libnx/switch_rules
+
+    PATH    :=  $(PORTLIBS)/bin:$(PATH)
+
+    DEVKITA64 := $(DEVKITPRO)/devkitA64
+
+    ifeq ($(HOSTPLATFORM),WINDOWS)
+        override DEVKITPRO := $(subst /c/,C:/,$(DEVKITPRO))
+        override DEVKITA64 := $(subst /c/,C:/,$(DEVKITA64))
+    endif
+
+    export PATH := $(DEVKITA64)/bin:$(PATH)
+
+    CROSS := aarch64-none-elf-
+
+    CCFULLPATH = $(DEVKITA64)/bin/$(CC)
+
+endif
+
 CC := $(CROSS)gcc$(CROSS_SUFFIX)
 CXX := $(CROSS)g++$(CROSS_SUFFIX)
 
@@ -214,6 +243,9 @@ LUAJIT := luajit$(HOSTEXESUFFIX)
 PKG_CONFIG := pkg-config
 
 ELF2DOL := elf2dol
+
+ELF2NRO  := elf2nro
+NACPTOOL := nacptool
 
 # Override defaults that absolutely will not work.
 ifeq ($(CC),cc)
@@ -299,6 +331,9 @@ ifeq ($(PLATFORM),WINDOWS)
     endif
 else ifeq ($(PLATFORM),WII)
     IMPLICIT_ARCH := ppc
+else ifeq ($(PLATFORM),SWITCH)
+    IMPLICIT_ARCH := aarch64
+    BITS := 64
 else
     ifneq ($(ARCH),)
         override ARCH := $(subst i486,i386,$(subst i586,i386,$(subst i686,i386,$(strip $(ARCH)))))
@@ -394,6 +429,12 @@ else ifeq ($(PLATFORM),WII)
     override HAVE_GTK2 := 0
     override HAVE_FLAC := 0
     SDL_TARGET := 1
+else ifeq ($(PLATFORM),SWITCH)
+    override USE_OPENGL := 0
+    override NETCODE := 0
+    override HAVE_GTK2 := 0
+    override HAVE_FLAC := 0
+    SDL_TARGET := 2
 else ifeq ($(PLATFORM),$(filter $(PLATFORM),DINGOO GCW QNX SUNOS SYLLABLE))
     override USE_OPENGL := 0
     override NOASM := 1
@@ -572,6 +613,14 @@ else ifeq ($(PLATFORM),WII)
     # -msdata=eabiexport
     COMPILERFLAGS += -DGEKKO -D__POWERPC__ -I$(LIBOGC_INC)
     LIBDIRS += -L$(LIBOGC_LIB)
+else ifeq ($(PLATFORM), SWITCH)
+    LIBNX_INC := $(LIBNX)/include
+    LIBNX_LIB := $(LIBNX)/lib
+
+    COMPILERFLAGS += -I$(LIBNX_INC)
+    LINKERFLAGS += -specs=$(DEVKITPRO)/libnx/switch.specs
+    LIBDIRS += -L$(LIBNX_LIB)
+    COMMONFLAGS += -fPIE
 else ifeq ($(PLATFORM),$(filter $(PLATFORM),DINGOO GCW))
     COMPILERFLAGS += -D__OPENDINGUX__
 else ifeq ($(PLATFORM),SKYOS)
@@ -582,7 +631,7 @@ else ifeq ($(SUBPLATFORM),LINUX)
 endif
 ASFLAGS += -f $(ASFORMAT)
 
-COMPILERFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
+#COMPILERFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
 
 
 ##### Optimizations
@@ -622,6 +671,10 @@ ifndef OPTOPT
     endif
     ifeq ($(PLATFORM),WII)
         OPTOPT := -mtune=750
+    endif
+
+    ifeq ($(PLATFORM),SWITCH)
+        OPTOPT := -mtune=cortex-a57 -march=armv8-a -mtp=soft
     endif
 endif
 
@@ -895,6 +948,9 @@ else ifeq ($(PLATFORM),BSD)
 else ifeq ($(PLATFORM),WII)
     COMPILERFLAGS += -I$(PORTLIBS)/include -Iplatform/Wii/include
     LIBDIRS += -L$(PORTLIBS)/lib -Lplatform/Wii/lib
+else ifeq ($(PLATFORM),SWITCH)
+    COMPILERFLAGS += -I$(PORTLIBS)/include
+    LIBDIRS += -L$(PORTLIBS)/lib
 endif
 
 
@@ -1016,16 +1072,18 @@ else ifeq ($(PLATFORM),SUNOS)
     LIBS += -lsocket -lnsl
 else ifeq ($(PLATFORM),WII)
     LIBS += -laesnd_tueidj -lfat -lwiiuse -lbte -lwiikeyboard -logc
+else ifeq ($(PLATFORM),SWITCH)
+    LIBS +=  -lFLAC -lmpg123 -lmodplug -lvorbisidec -lvorbisfile -lvorbis -logg -lnx 
 else ifeq ($(SUBPLATFORM),LINUX)
     LIBS += -lrt
 endif
 
-ifeq (,$(filter $(PLATFORM),WINDOWS WII))
+ifeq (,$(filter $(PLATFORM),WINDOWS WII SWITCH))
     ifneq ($(PLATFORM),BSD)
         LIBS += -ldl
     endif
     ifneq ($(PLATFORM),DARWIN)
-        LIBS += -pthread
+        #LIBS += -pthread
     endif
 endif
 

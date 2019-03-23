@@ -1,12 +1,12 @@
-# NBlood / Rednukem / PCExhumed
-Reverse-engineered ports of Build games using EDuke32 engine technology and development principles
+# NXBlood
+Switch Blood port based on EDuke32
 
 ## NBlood
-Blood port based on EDuke32
 
 ### Installing
-1. Extract NBlood to a new directory
-2. Copy the following files from Blood 1.21 to NBlood folder:
+1. put the NRO into the switch directory
+2. make a folder called nblood in the root of the SD card
+3. Copy the following files from Blood 1.21 to nblood folder:
 
    BLOOD.INI  
    BLOOD.RFF  
@@ -25,9 +25,20 @@ Blood port based on EDuke32
    TILES000.ART-TILES017.ART  
    VOXEL.DAT  
 
-3. Optionally, if you want to use CD audio tracks instead of MIDI, provide FLAC/OGG recordings in following format: bloodXX.flac/ogg, where XX is track number. Make sure to enable Redbook audio option in sound menu.
-4. Optionally, if you want cutscenes and you have the original CD, copy the `movie` folder into NBlood's folder (the folder itself too). If you have the GOG version of the game, rename `game.gog` to `game.bin` and `game.inst` to `game.cue` and mount the `cue` as a virtual CD (for example with `WinCDEmu`), there you will have the `movie` folder.
-5. Launch NBlood (on Linux, to play Cryptic Passage, launch with the `-ini CRYPTIC.INI` parameter)
+4. Copy nblood.pk3 from this repo into the nblood folder
+5. Optionally if you want to use CD audio tracks instead of MIDI, provide FLAC/OGG recordings in following format: bloodXX.flac/ogg, where XX is track number. Make sure to enable Redbook audio option in sound menu.
+6. Launch NXBlood
+
+## Building NXBlood
+# Requirements
+Make sure to have setup the devkitarm toolchain with devkita64
+install `switch-sdl2 switch-sdl2_mixer switch-libogg switch-libvorbis switch-flac` over pacman
+currently the required libFLAC packaged from pacman has undefined references, compile it yourself from https://github.com/devkitPro/pacman-packages
+
+# Building
+run `make PLATFORM=SWITCH`
+
+for various compilation options check the the [EDuke32 Wiki]
 
 ## PCExhumed
 A port of the PC version of Exhumed based on EDuke32
@@ -47,6 +58,9 @@ A port of the PC version of Exhumed based on EDuke32
    These will provide the game with it's awesome music soundtrack and add storyline narration by the King Ramses NPC.
 
 4. Launch PCExhumed.
+### Switch port
+  * Jan200101
+
 
 ### Notes
 Demo playback is not yet working.

@@ -17,6 +17,8 @@ apps/
 *.dylib
 *.so
 *.elf
+*.nro
+*.nacp
 *.dol
 *.x86
 *.x64

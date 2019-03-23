@@ -50,32 +50,32 @@ libxmplite := libxmp-lite
 
 libxmplite_objs := \
     common.c \
-    control.c \
-    dataio.c \
-    effects.c \
-    filter.c \
-    format.c \
-    hio.c \
+	control.c \
+	dataio.c \
+	effects.c \
+	filter.c \
+	format.c \
+	hio.c \
     it_load.c \
     itsex.c \
-    lfo.c \
-    load.c \
-    load_helpers.c \
-    memio.c \
-    mix_all.c \
+	lfo.c \
+	load.c \
+	load_helpers.c \
+	memio.c \
+	mix_all.c \
     mixer.c \
     mod_load.c \
     mtm_load.c \
-    period.c \
-    player.c \
-    read_event.c \
+	period.c \
+	player.c \
+	read_event.c \
     s3m_load.c \
     sample.c \
-    scan.c \
-    smix.c \
-    virtual.c \
+	scan.c \
+	smix.c \
+	virtual.c \
     win32.c \
-    xm_load.c \
+	xm_load.c \
 
 libxmplite_root := $(source)/$(libxmplite)
 libxmplite_src := $(libxmplite_root)/src
@@ -90,11 +90,11 @@ libxmplite_cflags := -DHAVE_ROUND -DLIBXMP_CORE_PLAYER -DBUILDING_STATIC -I$(lib
 lpeg := lpeg
 
 lpeg_objs := \
-    lpcap.c \
-    lpcode.c \
-    lpprint.c \
-    lptree.c \
-    lpvm.c \
+	lpcap.c \
+	lpcode.c \
+	lpprint.c \
+	lptree.c \
+	lpvm.c \
 
 lpeg_root := $(source)/$(lpeg)
 lpeg_src := $(lpeg_root)/src
@@ -144,7 +144,7 @@ physfs_cflags :=
 glad := glad
 
 glad_objs := \
-    glad.c \
+	glad.c \
 
 glad_root := $(source)/$(glad)
 glad_src := $(glad_root)/src
@@ -154,7 +154,7 @@ glad_obj := $(obj)/$(glad)
 glad_cflags :=
 
 ifeq ($(RENDERTYPE),WIN)
-    glad_objs += glad_wgl.c
+	glad_objs += glad_wgl.c
 endif
 
 
@@ -196,11 +196,11 @@ voidwrap_cflags := -I$(voidwrap_root)/sdk/public/steam -fPIC -fvisibility=hidden
 libsmackerdec := libsmackerdec
 
 libsmackerdec_objs := \
-    BitReader.cpp \
-    FileStream.cpp \
-    HuffmanVLC.cpp \
-    LogError.cpp \
-    SmackerDecoder.cpp \
+	BitReader.cpp \
+	FileStream.cpp \
+	HuffmanVLC.cpp \
+	LogError.cpp \
+	SmackerDecoder.cpp \
 
 libsmackerdec_root := $(source)/$(libsmackerdec)
 libsmackerdec_src := $(libsmackerdec_root)/src
@@ -215,10 +215,10 @@ libsmackerdec_cflags :=
 #### EBacktrace
 
 ifndef ebacktrace_dll
-    ebacktrace_dll := ebacktrace1.dll
-    ifeq ($(findstring x86_64,$(COMPILERTARGET)),x86_64)
-        ebacktrace_dll := ebacktrace1-64.dll
-    endif
+	ebacktrace_dll := ebacktrace1.dll
+	ifeq ($(findstring x86_64,$(COMPILERTARGET)),x86_64)
+		ebacktrace_dll := ebacktrace1-64.dll
+	endif
 endif
 
 
@@ -241,26 +241,26 @@ endif
 
 engine_objs := \
     2d.cpp \
-    baselayer.cpp \
-    cache1d.cpp \
+	baselayer.cpp \
+	cache1d.cpp \
     clip.cpp \
     colmatch.cpp \
-    common.cpp \
+	common.cpp \
     communityapi.cpp \
-    compat.cpp \
+	compat.cpp \
     cpuid.cpp \
-    crc32.cpp \
-    defs.cpp \
+	crc32.cpp \
+	defs.cpp \
     dxtfilter.cpp \
     enet.cpp \
-    engine.cpp \
+	engine.cpp \
     fix16.cpp \
     fix16_str.cpp \
-    hash.cpp \
-    hightile.cpp \
+	hash.cpp \
+	hightile.cpp \
     klzw.cpp \
-    kplib.cpp \
-    lz4.c \
+	kplib.cpp \
+	lz4.c \
     md4.cpp \
     mhk.cpp \
     miniz.c \
@@ -268,39 +268,39 @@ engine_objs := \
     miniz_tinfl.c \
     mmulti_null.cpp \
     mutex.cpp \
-    osd.cpp \
+	osd.cpp \
     palette.cpp \
     pngwrite.cpp \
     polymost.cpp \
     polymost1Frag.glsl \
     polymost1Vert.glsl \
-    pragmas.cpp \
+	pragmas.cpp \
     rev.cpp \
     screenshot.cpp \
-    scriptfile.cpp \
+	scriptfile.cpp \
     sjson.cpp \
     smalltextfont.cpp \
-    softsurface.cpp \
+	softsurface.cpp \
     texcache.cpp \
     textfont.cpp \
     tiles.cpp \
     timer.cpp \
     vfs.cpp \
-    xxhash.c \
+	xxhash.c \
     zpl.cpp \
 
 engine_editor_objs := \
-    build.cpp \
-    config.cpp \
-    defs.cpp \
+	build.cpp \
+	config.cpp \
+	defs.cpp \
 
 engine_tools_objs := \
     colmatch.cpp \
-    compat.cpp \
-    crc32.cpp \
+	compat.cpp \
+	crc32.cpp \
     klzw.cpp \
     kplib.cpp \
-    lz4.cpp \
+	lz4.cpp \
     pragmas.cpp \
     vfs.cpp \
 
@@ -309,57 +309,60 @@ ifeq (0,$(NOASM))
 else
   engine_objs += a-c.cpp
   ifneq (0,$(USE_ASM64))
-    engine_objs += a64.yasm
+	engine_objs += a64.yasm
   endif
 endif
 ifeq (1,$(USE_OPENGL))
-    engine_objs += glsurface.cpp voxmodel.cpp mdsprite.cpp tilepacker.cpp
-    engine_deps += glad
-    ifeq (1,$(POLYMER))
-        engine_objs += glbuild.cpp polymer.cpp
-    endif
+	engine_objs += glsurface.cpp voxmodel.cpp mdsprite.cpp tilepacker.cpp
+	engine_deps += glad
+	ifeq (1,$(POLYMER))
+		engine_objs += glbuild.cpp polymer.cpp
+	endif
 endif
 ifneq (0,$(LUNATIC))
-    engine_objs += lunatic.cpp
+	engine_objs += lunatic.cpp
 endif
 ifeq ($(PLATFORM),DARWIN)
-    engine_objs += osxbits.mm
-    engine_tools_objs += osxbits.mm
-    ifeq ($(STARTUP_WINDOW),1)
-        engine_editor_objs += startosx.editor.mm
-    endif
-    ifeq ($(SDL_TARGET),1)
-        ifneq ($(SDL_FRAMEWORK),0)
-            engine_objs += SDLMain.mm
-        endif
-    endif
+	engine_objs += osxbits.mm
+	engine_tools_objs += osxbits.mm
+	ifeq ($(STARTUP_WINDOW),1)
+		engine_editor_objs += startosx.editor.mm
+	endif
+	ifeq ($(SDL_TARGET),1)
+		ifneq ($(SDL_FRAMEWORK),0)
+			engine_objs += SDLMain.mm
+		endif
+	endif
 endif
 ifeq ($(PLATFORM),WINDOWS)
-    engine_objs += winbits.cpp
-    ifeq ($(STARTUP_WINDOW),1)
-        engine_editor_objs += startwin.editor.cpp
-    endif
+	engine_objs += winbits.cpp
+	ifeq ($(STARTUP_WINDOW),1)
+		engine_editor_objs += startwin.editor.cpp
+	endif
 endif
 ifeq ($(PLATFORM),WII)
-    engine_objs += wiibits.cpp
-    LINKERFLAGS += -Wl,-wrap,c_default_exceptionhandler
+	engine_objs += wiibits.cpp
+	LINKERFLAGS += -Wl,-wrap,c_default_exceptionhandler
+endif
+ifeq ($(PLATFORM),SWITCH)
+	LINKERFLAGS += -Wl,-no-as-needed
 endif
 ifeq ($(RENDERTYPE),SDL)
-    engine_objs += sdlayer.cpp
+	engine_objs += sdlayer.cpp
 
-    ifeq (1,$(HAVE_GTK2))
-        engine_objs += gtkbits.cpp dynamicgtk.cpp
-        ifeq ($(STARTUP_WINDOW),1)
-            engine_editor_objs += startgtk.editor.cpp
-        endif
-    endif
+	ifeq (1,$(HAVE_GTK2))
+		engine_objs += gtkbits.cpp dynamicgtk.cpp
+		ifeq ($(STARTUP_WINDOW),1)
+			engine_editor_objs += startgtk.editor.cpp
+		endif
+	endif
 endif
 ifeq ($(RENDERTYPE),WIN)
-    engine_objs += winlayer.cpp rawinput.cpp
+	engine_objs += winlayer.cpp rawinput.cpp
 endif
 
 ifneq ($(USE_LIBVPX),0)
-    engine_objs += animvpx.cpp
+	engine_objs += animvpx.cpp
 endif
 
 
@@ -374,10 +377,10 @@ mact_obj := $(obj)/$(mact)
 
 mact_objs := \
     animlib.cpp \
-    control.cpp \
-    joystick.cpp \
+	control.cpp \
+	joystick.cpp \
     keyboard.cpp \
-    scriplib.cpp \
+	scriplib.cpp \
 
 
 #### AudioLib
@@ -386,21 +389,21 @@ audiolib := audiolib
 
 audiolib_objs := \
     driver_adlib.cpp \
-    drivers.cpp \
+	drivers.cpp \
     flac.cpp \
     formats.cpp \
-    fx_man.cpp \
+	fx_man.cpp \
     gmtimbre.cpp \
     midi.cpp \
-    mix.cpp \
-    mixst.cpp \
+	mix.cpp \
+	mixst.cpp \
     multivoc.cpp \
     music.cpp \
     opl3.cpp \
-    pitch.cpp \
-    vorbis.cpp \
-    xa.cpp \
-    xmp.cpp \
+	pitch.cpp \
+	vorbis.cpp \
+	xa.cpp \
+	xmp.cpp \
 
 audiolib_root := $(source)/$(audiolib)
 audiolib_src := $(audiolib_root)/src
@@ -416,15 +419,15 @@ ifeq ($(PLATFORM),WINDOWS)
 endif
 
 ifeq ($(RENDERTYPE),SDL)
-    ifeq (,$(filter $(PLATFORM),DARWIN WINDOWS WII))
-        audiolib_cflags += `$(PKG_CONFIG) --cflags vorbis`
-    endif
-    audiolib_objs += driver_sdl.cpp
+	ifeq (,$(filter $(PLATFORM),DARWIN WINDOWS WII))
+		audiolib_cflags += `$(PKG_CONFIG) --cflags vorbis`
+	endif
+	audiolib_objs += driver_sdl.cpp
 endif
 
 ifneq (0,$(HAVE_XMP))
-    audiolib_cflags += -I$(libxmplite_inc)
-    audiolib_deps += libxmplite
+	audiolib_cflags += -I$(libxmplite_inc)
+	audiolib_deps += libxmplite
 endif
 
 
@@ -433,7 +436,7 @@ endif
 tools := tools
 
 tools_objs := \
-    compat_tools.cpp \
+	compat_tools.cpp \
 
 tools_root := $(source)/$(tools)
 tools_src := $(tools_root)/src
@@ -450,22 +453,22 @@ tools_targets := \
     generateicon \
     givedepth \
     ivfrate \
-    kextract \
-    kgroup \
-    kmd2tool \
+	kextract \
+	kgroup \
+	kmd2tool \
     map2stl \
-    md2tool \
-    mkpalette \
+	md2tool \
+	mkpalette \
     transpal \
-    unpackssi \
+	unpackssi \
     wad2art \
     wad2map \
 
 ifeq ($(PLATFORM),WINDOWS)
-    tools_targets += enumdisplay getdxdidf
+	tools_targets += enumdisplay getdxdidf
 endif
 ifeq ($(RENDERTYPE),SDL)
-    tools_targets += makesdlkeytrans
+	tools_targets += makesdlkeytrans
 endif
 
 
@@ -489,14 +492,14 @@ kenbuild_game_proper := EKenBuild
 kenbuild_editor_proper := EKenBuild Editor
 
 kenbuild_game_objs := \
-    common.cpp \
-    config.cpp \
+	common.cpp \
+	config.cpp \
     kdmeng.cpp \
     game.cpp \
 
 kenbuild_editor_objs := \
-    bstub.cpp \
-    common.cpp \
+	bstub.cpp \
+	common.cpp \
 
 kenbuild_game_rsrc_objs :=
 kenbuild_editor_rsrc_objs :=
@@ -504,24 +507,24 @@ kenbuild_game_gen_objs :=
 kenbuild_editor_rsrc_objs :=
 
 ifeq (11,$(HAVE_GTK2)$(STARTUP_WINDOW))
-    kenbuild_game_objs += startgtk.game.cpp
-    kenbuild_game_gen_objs += game_banner.c
-    kenbuild_editor_gen_objs += build_banner.c
+	kenbuild_game_objs += startgtk.game.cpp
+	kenbuild_game_gen_objs += game_banner.c
+	kenbuild_editor_gen_objs += build_banner.c
 endif
 ifeq ($(RENDERTYPE),SDL)
-    kenbuild_game_rsrc_objs += game_icon.c
-    kenbuild_editor_rsrc_objs += build_icon.c
+	kenbuild_game_rsrc_objs += game_icon.c
+	kenbuild_editor_rsrc_objs += build_icon.c
 endif
 ifeq ($(PLATFORM),WINDOWS)
-    kenbuild_game_objs += startwin.game.cpp
-    kenbuild_game_rsrc_objs += gameres.rc
-    kenbuild_editor_rsrc_objs += buildres.rc
+	kenbuild_game_objs += startwin.game.cpp
+	kenbuild_game_rsrc_objs += gameres.rc
+	kenbuild_editor_rsrc_objs += buildres.rc
 endif
 
 ifeq ($(PLATFORM),DARWIN)
-    ifeq ($(STARTUP_WINDOW),1)
-        kenbuild_game_objs += StartupWinController.game.mm
-    endif
+	ifeq ($(STARTUP_WINDOW),1)
+		kenbuild_game_objs += StartupWinController.game.mm
+	endif
 endif
 
 
@@ -555,62 +558,62 @@ duke3d_game_deps := audiolib mact
 duke3d_editor_deps := audiolib
 
 ifneq (0,$(LUNATIC))
-    duke3d_game_deps += lunatic lunatic_game lpeg
-    duke3d_editor_deps += lunatic lunatic_editor lpeg
+	duke3d_game_deps += lunatic lunatic_game lpeg
+	duke3d_editor_deps += lunatic lunatic_editor lpeg
 endif
 
 duke3d_game := eduke32
 duke3d_editor := mapster32
 
 ifneq (,$(APPBASENAME))
-    duke3d_game := $(APPBASENAME)
+	duke3d_game := $(APPBASENAME)
 endif
 
 duke3d_game_proper := EDuke32
 duke3d_editor_proper := Mapster32
 
 duke3d_common_editor_objs := \
-    m32common.cpp \
-    m32def.cpp \
-    m32exec.cpp \
-    m32vars.cpp \
+	m32common.cpp \
+	m32def.cpp \
+	m32exec.cpp \
+	m32vars.cpp \
 
 duke3d_game_objs := \
-    actors.cpp \
-    anim.cpp \
+	actors.cpp \
+	anim.cpp \
     cheats.cpp \
     cmdline.cpp \
-    common.cpp \
-    config.cpp \
-    demo.cpp \
+	common.cpp \
+	config.cpp \
+	demo.cpp \
     game.cpp \
     gamedef.cpp \
     gameexec.cpp \
     gamevars.cpp \
     global.cpp \
     grpscan.cpp \
-    input.cpp \
-    menus.cpp \
-    namesdyn.cpp \
+	input.cpp \
+	menus.cpp \
+	namesdyn.cpp \
     network.cpp \
-    osdcmds.cpp \
+	osdcmds.cpp \
     osdfuncs.cpp \
     player.cpp \
     premap.cpp \
     rts.cpp \
     savegame.cpp \
-    sbar.cpp \
-    screens.cpp \
+	sbar.cpp \
+	screens.cpp \
     screentext.cpp \
     sector.cpp \
     sounds.cpp \
     soundsdyn.cpp \
 
 duke3d_editor_objs := \
-    astub.cpp \
-    common.cpp \
-    grpscan.cpp \
-    sounds_mapster32.cpp \
+	astub.cpp \
+	common.cpp \
+	grpscan.cpp \
+	sounds_mapster32.cpp \
 
 duke3d_game_rsrc_objs :=
 duke3d_editor_rsrc_objs :=
@@ -628,121 +631,121 @@ lunatic_src := $(duke3d_src)/$(lunatic)
 lunatic_obj := $(duke3d_obj)
 
 ifneq (0,$(LUNATIC))
-    COMPILERFLAGS += -I$(lunatic_src) -DLUNATIC
+	COMPILERFLAGS += -I$(lunatic_src) -DLUNATIC
 
-    # Determine size of _defs*.lua bytecode once.
-    ifndef DEFS_BC_SIZE
-        DEFS_BC_SIZE := $(shell $(LUAJIT) -bg -t h $(lunatic_src)/_defs_game.lua -)
-        DEFS_BC_SIZE := $(word 3, $(DEFS_BC_SIZE))
-    endif
-    ifndef DEFS_M32_BC_SIZE
-        DEFS_M32_BC_SIZE := $(shell $(LUAJIT) -bg -t h $(lunatic_src)/_defs_editor.lua -)
-        DEFS_M32_BC_SIZE := $(word 3, $(DEFS_M32_BC_SIZE))
-    endif
-    duke3d_cflags += -DLUNATIC_DEFS_BC_SIZE=$(DEFS_BC_SIZE) -DLUNATIC_DEFS_M32_BC_SIZE=$(DEFS_M32_BC_SIZE)
+	# Determine size of _defs*.lua bytecode once.
+	ifndef DEFS_BC_SIZE
+		DEFS_BC_SIZE := $(shell $(LUAJIT) -bg -t h $(lunatic_src)/_defs_game.lua -)
+		DEFS_BC_SIZE := $(word 3, $(DEFS_BC_SIZE))
+	endif
+	ifndef DEFS_M32_BC_SIZE
+		DEFS_M32_BC_SIZE := $(shell $(LUAJIT) -bg -t h $(lunatic_src)/_defs_editor.lua -)
+		DEFS_M32_BC_SIZE := $(word 3, $(DEFS_M32_BC_SIZE))
+	endif
+	duke3d_cflags += -DLUNATIC_DEFS_BC_SIZE=$(DEFS_BC_SIZE) -DLUNATIC_DEFS_M32_BC_SIZE=$(DEFS_M32_BC_SIZE)
 
-    # Lunatic object base names. These are not used in targets directly.
-    lunatic_objs := \
-        defs_common.lua \
-        engine_maptext.lua \
-        engine.lua \
-        bcarray.lua \
-        bcheck.lua \
-        bitar.lua \
-        xmath.lua \
-        v.lua \
-        dump.lua \
-        dis_x86.lua \
-        dis_x64.lua \
+	# Lunatic object base names. These are not used in targets directly.
+	lunatic_objs := \
+		defs_common.lua \
+		engine_maptext.lua \
+		engine.lua \
+		bcarray.lua \
+		bcheck.lua \
+		bitar.lua \
+		xmath.lua \
+		v.lua \
+		dump.lua \
+		dis_x86.lua \
+		dis_x64.lua \
 
-    lunatic_game_objs := \
-        lunatic_game.cpp \
-        _defs_game.lua \
-        con_lang.lua \
-        lunacon.lua \
-        randgen.lua \
-        stat.lua \
-        control.lua \
-        lunasave.lua \
-        fs.lua \
+	lunatic_game_objs := \
+		lunatic_game.cpp \
+		_defs_game.lua \
+		con_lang.lua \
+		lunacon.lua \
+		randgen.lua \
+		stat.lua \
+		control.lua \
+		lunasave.lua \
+		fs.lua \
 
-    lunatic_editor_objs := \
-        lunatic_editor.cpp \
-        _defs_editor.lua \
+	lunatic_editor_objs := \
+		lunatic_editor.cpp \
+		_defs_editor.lua \
 
-    # TODO: remove debugging modules from release build
+	# TODO: remove debugging modules from release build
 
-    # now, take care of having the necessary symbols (sector, wall, etc.) in the
-    # executable no matter what the debugging level
+	# now, take care of having the necessary symbols (sector, wall, etc.) in the
+	# executable no matter what the debugging level
 
-    ifeq ($(PLATFORM),DARWIN)
-        # strip on OSX says: removing global symbols from a final linked no longer supported.
-        #                    Use -exported_symbols_list at link time when building
-        # But, following _their_ directions does not give us the symbols! wtf?
-        # Instead of using -alias_list and -exported_symbols_list, prevent stripping them.
-        duke3d_game_stripflags += -s $(duke3d_obj)/lunatic_dynsymlist_game_osx
-        duke3d_editor_stripflags += -s $(duke3d_obj)/lunatic_dynsymlist_editor_osx
+	ifeq ($(PLATFORM),DARWIN)
+		# strip on OSX says: removing global symbols from a final linked no longer supported.
+		#                    Use -exported_symbols_list at link time when building
+		# But, following _their_ directions does not give us the symbols! wtf?
+		# Instead of using -alias_list and -exported_symbols_list, prevent stripping them.
+		duke3d_game_stripflags += -s $(duke3d_obj)/lunatic_dynsymlist_game_osx
+		duke3d_editor_stripflags += -s $(duke3d_obj)/lunatic_dynsymlist_editor_osx
 
-        duke3d_game_orderonlydeps += $(duke3d_obj)/lunatic_dynsymlist_game_osx
-        duke3d_editor_orderonlydeps += $(duke3d_obj)/lunatic_dynsymlist_editor_osx
-        LINKERFLAGS += -pagezero_size 10000 -image_base 100000000
-    endif
-    ifeq ($(PLATFORM),WINDOWS)
-        override STRIP :=
-        duke3d_game_miscdeps += $(duke3d_obj)/lunatic_dynsymlist_game.def
-        duke3d_editor_miscdeps += $(duke3d_obj)/lunatic_dynsymlist_editor.def
-    endif
-    ifeq ($(SUBPLATFORM),LINUX)
-        override STRIP :=
-        duke3d_game_ldflags += -Wl,--dynamic-list=$(lunatic_src)/dynsymlist_game.lds
-        duke3d_editor_ldflags += -Wl,--dynamic-list=$(lunatic_src)/dynsymlist_editor.lds
-    endif
+		duke3d_game_orderonlydeps += $(duke3d_obj)/lunatic_dynsymlist_game_osx
+		duke3d_editor_orderonlydeps += $(duke3d_obj)/lunatic_dynsymlist_editor_osx
+		LINKERFLAGS += -pagezero_size 10000 -image_base 100000000
+	endif
+	ifeq ($(PLATFORM),WINDOWS)
+		override STRIP :=
+		duke3d_game_miscdeps += $(duke3d_obj)/lunatic_dynsymlist_game.def
+		duke3d_editor_miscdeps += $(duke3d_obj)/lunatic_dynsymlist_editor.def
+	endif
+	ifeq ($(SUBPLATFORM),LINUX)
+		override STRIP :=
+		duke3d_game_ldflags += -Wl,--dynamic-list=$(lunatic_src)/dynsymlist_game.lds
+		duke3d_editor_ldflags += -Wl,--dynamic-list=$(lunatic_src)/dynsymlist_editor.lds
+	endif
 endif
 
 ifeq ($(SUBPLATFORM),LINUX)
-    LIBS += -lFLAC -lvorbisfile -lvorbis -logg
+	LIBS += -lFLAC -lvorbisfile -lvorbis -logg
 endif
 
 ifeq ($(PLATFORM),BSD)
-    LIBS += -lFLAC -lvorbisfile -lvorbis -logg -lexecinfo
+	LIBS += -lFLAC -lvorbisfile -lvorbis -logg -lexecinfo
 endif
 
 ifeq ($(PLATFORM),DARWIN)
-    LIBS += -lFLAC -lvorbisfile -lvorbis -logg -lm \
-            -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,OpenGL \
-            -Wl,-framework,CoreMIDI -Wl,-framework,AudioUnit \
-            -Wl,-framework,AudioToolbox -Wl,-framework,IOKit -Wl,-framework,AGL
-    ifneq (00,$(DARWIN9)$(DARWIN10))
-        LIBS += -Wl,-framework,QuickTime -lm
-    endif
+	LIBS += -lFLAC -lvorbisfile -lvorbis -logg -lm \
+			-Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,OpenGL \
+			-Wl,-framework,CoreMIDI -Wl,-framework,AudioUnit \
+			-Wl,-framework,AudioToolbox -Wl,-framework,IOKit -Wl,-framework,AGL
+	ifneq (00,$(DARWIN9)$(DARWIN10))
+		LIBS += -Wl,-framework,QuickTime -lm
+	endif
 
-    ifeq ($(STARTUP_WINDOW),1)
-        duke3d_game_objs += GrpFile.game.mm GameListSource.game.mm startosx.game.mm
-    endif
+	ifeq ($(STARTUP_WINDOW),1)
+		duke3d_game_objs += GrpFile.game.mm GameListSource.game.mm startosx.game.mm
+	endif
 endif
 
 ifeq ($(PLATFORM),WINDOWS)
     LIBS += -lFLAC -lvorbisfile -lvorbis -logg -ldsound
-    duke3d_game_objs += winbits.cpp
-    duke3d_game_rsrc_objs += gameres.rc
-    duke3d_editor_rsrc_objs += buildres.rc
-    ifeq ($(STARTUP_WINDOW),1)
-        duke3d_game_objs += startwin.game.cpp
-    endif
+	duke3d_game_objs += winbits.cpp
+	duke3d_game_rsrc_objs += gameres.rc
+	duke3d_editor_rsrc_objs += buildres.rc
+	ifeq ($(STARTUP_WINDOW),1)
+		duke3d_game_objs += startwin.game.cpp
+	endif
 endif
 
 ifeq ($(PLATFORM),WII)
-    LIBS += -lvorbisidec
+	LIBS += -lvorbisidec
 endif
 
 ifeq (11,$(HAVE_GTK2)$(STARTUP_WINDOW))
-    duke3d_game_objs += startgtk.game.cpp
-    duke3d_game_gen_objs += game_banner.c
-    duke3d_editor_gen_objs += build_banner.c
+	duke3d_game_objs += startgtk.game.cpp
+	duke3d_game_gen_objs += game_banner.c
+	duke3d_editor_gen_objs += build_banner.c
 endif
 ifeq ($(RENDERTYPE),SDL)
-    duke3d_game_rsrc_objs += game_icon.c
-    duke3d_editor_rsrc_objs += build_icon.c
+	duke3d_game_rsrc_objs += game_icon.c
+	duke3d_editor_rsrc_objs += build_icon.c
 endif
 
 
@@ -764,13 +767,13 @@ blood_cflags := -I$(blood_src)
 blood_game_deps := audiolib mact libsmackerdec
 
 ifneq (0,$(NETCODE))
-    blood_game_deps += enet
+	blood_game_deps += enet
 endif
 
 blood_game := nblood
 
 ifneq (,$(APPBASENAME))
-    blood_game := $(APPBASENAME)
+	blood_game := $(APPBASENAME)
 endif
 
 blood_game_proper := NBlood
@@ -857,17 +860,17 @@ blood_game_miscdeps :=
 blood_game_orderonlydeps :=
 
 ifeq ($(PLATFORM),DARWIN)
-    ifeq ($(STARTUP_WINDOW),1)
-        blood_game_objs += startosx.game.mm
-    endif
+	ifeq ($(STARTUP_WINDOW),1)
+		blood_game_objs += startosx.game.mm
+	endif
 endif
 
 ifeq ($(PLATFORM),WINDOWS)
-    blood_game_objs += winbits.cpp
-    blood_game_rsrc_objs += gameres.rc
-    ifeq ($(STARTUP_WINDOW),1)
-        blood_game_objs += startwin.game.cpp
-    endif
+	blood_game_objs += winbits.cpp
+	blood_game_rsrc_objs += gameres.rc
+	ifeq ($(STARTUP_WINDOW),1)
+		blood_game_objs += startwin.game.cpp
+	endif
 endif
 
 ifeq (11,$(HAVE_GTK2)$(STARTUP_WINDOW))
@@ -985,11 +988,11 @@ ifeq ($(PLATFORM),WINDOWS)
     rr_editor_rsrc_objs += buildres.rc
     ifeq ($(STARTUP_WINDOW),1)
         rr_game_objs += startwin.game.cpp
-    endif
+	endif
 endif
 
 ifeq ($(PLATFORM),WII)
-    LIBS += -lvorbisidec
+	LIBS += -lvorbisidec
 endif
 
 ifeq (11,$(HAVE_GTK2)$(STARTUP_WINDOW))
@@ -1024,83 +1027,83 @@ sw_game_proper := VoidSW
 sw_editor_proper := Wangulator
 
 sw_game_objs := \
-    actor.cpp \
-    ai.cpp \
-    anim.cpp \
-    border.cpp \
-    break.cpp \
-    bunny.cpp \
-    cache.cpp \
-    cheats.cpp \
-    colormap.cpp \
-    common.cpp \
-    config.cpp \
-    console.cpp \
-    coolg.cpp \
-    coolie.cpp \
-    copysect.cpp \
-    demo.cpp \
-    draw.cpp \
-    eel.cpp \
-    game.cpp \
-    girlninj.cpp \
-    goro.cpp \
-    grpscan.cpp \
-    hornet.cpp \
-    interp.cpp \
-    interpsh.cpp \
-    inv.cpp \
-    jplayer.cpp \
-    jsector.cpp \
-    jweapon.cpp \
-    lava.cpp \
-    light.cpp \
-    mclip.cpp \
-    mdastr.cpp \
-    menus.cpp \
-    miscactr.cpp \
-    morph.cpp \
+	actor.cpp \
+	ai.cpp \
+	anim.cpp \
+	border.cpp \
+	break.cpp \
+	bunny.cpp \
+	cache.cpp \
+	cheats.cpp \
+	colormap.cpp \
+	common.cpp \
+	config.cpp \
+	console.cpp \
+	coolg.cpp \
+	coolie.cpp \
+	copysect.cpp \
+	demo.cpp \
+	draw.cpp \
+	eel.cpp \
+	game.cpp \
+	girlninj.cpp \
+	goro.cpp \
+	grpscan.cpp \
+	hornet.cpp \
+	interp.cpp \
+	interpsh.cpp \
+	inv.cpp \
+	jplayer.cpp \
+	jsector.cpp \
+	jweapon.cpp \
+	lava.cpp \
+	light.cpp \
+	mclip.cpp \
+	mdastr.cpp \
+	menus.cpp \
+	miscactr.cpp \
+	morph.cpp \
     network.cpp \
-    ninja.cpp \
-    panel.cpp \
-    player.cpp \
-    predict.cpp \
-    quake.cpp \
-    ripper.cpp \
-    ripper2.cpp \
-    rooms.cpp \
-    rotator.cpp \
-    rts.cpp \
-    save.cpp \
+	ninja.cpp \
+	panel.cpp \
+	player.cpp \
+	predict.cpp \
+	quake.cpp \
+	ripper.cpp \
+	ripper2.cpp \
+	rooms.cpp \
+	rotator.cpp \
+	rts.cpp \
+	save.cpp \
     saveable.cpp \
-    scrip2.cpp \
-    sector.cpp \
-    serp.cpp \
-    setup.cpp \
-    skel.cpp \
-    skull.cpp \
-    slidor.cpp \
-    sounds.cpp \
-    spike.cpp \
-    sprite.cpp \
-    sumo.cpp \
-    swconfig.cpp \
-    sync.cpp \
-    text.cpp \
-    track.cpp \
-    vator.cpp \
-    vis.cpp \
-    wallmove.cpp \
-    warp.cpp \
-    weapon.cpp \
-    zilla.cpp \
-    zombie.cpp \
+	scrip2.cpp \
+	sector.cpp \
+	serp.cpp \
+	setup.cpp \
+	skel.cpp \
+	skull.cpp \
+	slidor.cpp \
+	sounds.cpp \
+	spike.cpp \
+	sprite.cpp \
+	sumo.cpp \
+	swconfig.cpp \
+	sync.cpp \
+	text.cpp \
+	track.cpp \
+	vator.cpp \
+	vis.cpp \
+	wallmove.cpp \
+	warp.cpp \
+	weapon.cpp \
+	zilla.cpp \
+	zombie.cpp \
 
 sw_editor_objs := \
-    bldscript.cpp \
+	bldscript.cpp \
     brooms.cpp \
-    colormap.cpp \
-    common.cpp \
+	colormap.cpp \
+	common.cpp \
     grpscan.cpp \
     jbhlp.cpp \
     jnstub.cpp \
@@ -1111,18 +1114,18 @@ sw_game_gen_objs :=
 sw_editor_gen_objs :=
 
 ifeq (11,$(HAVE_GTK2)$(STARTUP_WINDOW))
-    sw_game_objs += startgtk.game.cpp
-    sw_game_gen_objs += game_banner.c
-    sw_editor_gen_objs += build_banner.c
+	sw_game_objs += startgtk.game.cpp
+	sw_game_gen_objs += game_banner.c
+	sw_editor_gen_objs += build_banner.c
 endif
 ifeq ($(RENDERTYPE),SDL)
-    sw_game_rsrc_objs += game_icon.c
-    sw_editor_rsrc_objs += game_icon.c
+	sw_game_rsrc_objs += game_icon.c
+	sw_editor_rsrc_objs += game_icon.c
 endif
 ifeq ($(PLATFORM),WINDOWS)
-    sw_game_objs += startwin.game.cpp
-    sw_game_rsrc_objs += gameres.rc
-    sw_editor_rsrc_objs += buildres.rc
+	sw_game_objs += startwin.game.cpp
+	sw_game_rsrc_objs += gameres.rc
+	sw_editor_rsrc_objs += buildres.rc
 endif
 ifeq ($(PLATFORM),DARWIN)
     ifeq ($(STARTUP_WINDOW),1)
@@ -1254,34 +1257,34 @@ endif
 ##### Recipes
 
 games := \
-    duke3d \
+	duke3d \
     kenbuild \
-    blood \
+	blood \
     rr \
-    sw \
+	sw \
     exhumed \
 
 libraries := \
-    audiolib \
+	audiolib \
     engine \
     glad \
-    libxmplite \
-    lpeg \
+	libxmplite \
+	lpeg \
     mact \
     voidwrap \
-    libsmackerdec \
+	libsmackerdec \
 
 ifneq (0,$(USE_PHYSFS))
     libraries += physfs
 endif
 
 components := \
-    $(games) \
-    $(libraries) \
-    tools \
+	$(games) \
+	$(libraries) \
+	tools \
 
 roles := \
-    game \
+	game \
 #    editor \
 
 
@@ -1289,14 +1292,14 @@ ifeq ($(PRETTY_OUTPUT),1)
 .SILENT:
 endif
 .PHONY: \
-    $(addprefix clean,$(games) test utils tools) \
+	$(addprefix clean,$(games) test utils tools) \
     $(engine_obj)/rev.$o \
     all \
     clang-tools \
-    clean \
-    printtools \
+	clean \
+	printtools \
     printutils \
-    rev \
+	rev \
     start \
     veryclean \
 
@@ -1329,6 +1332,11 @@ ifneq ($(ELF2DOL),)
 endif
 endif
 
+ifeq ($(PLATFORM),SWITCH)
+ifneq ($(ELF2NRO),)
+%$(DOLSUFFIX): %$(EXESUFFIX)
+endif
+endif
 
 define BUILDRULE
 
@@ -1338,6 +1346,14 @@ $$($1_$2)$$(EXESUFFIX): $$(foreach i,$(call getdeps,$1,$2),$$(call expandobjs,$$
 ifeq ($$(PLATFORM),WII)
 ifneq ($$(ELF2DOL),)
 	$$(ELF2DOL) $$@ $$($1_$2)$$(DOLSUFFIX)
+endif
+endif
+ifeq ($$(PLATFORM),SWITCH)
+ifneq ($$(NACPTOOL),)
+	$$(NACPTOOL) --create $$(APP_TITLE) $$(APP_AUTHOR) $$(APP_VERSION) $$($1_$2).nacp
+endif
+ifneq ($$(ELF2NRO),)
+	$$(ELF2NRO) $$@ $$($1_$2)$$(DOLSUFFIX) --icon=$$(APP_ICON) --nacp=$$($1_$2).nacp
 endif
 endif
 ifneq ($$(STRIP),)
