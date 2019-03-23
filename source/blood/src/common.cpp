@@ -138,6 +138,8 @@ void G_ExtInit(void)
                       APPNAME
 #elif defined(GEKKO)
                       "apps/" APPBASENAME
+#elif defined(__SWITCH__)
+                      APPBASENAME
 #else
                       ".config/" APPBASENAME
 #endif

@@ -302,7 +302,7 @@ void CONFIG_SetDefaults(void)
     NumVoices = 64;
 #endif
 
-#ifdef GEKKO
+#if defined(GEKKO) || defined(__SWITCH__)
     gSetup.usejoystick = 1;
 #else
     gSetup.usejoystick = 0;

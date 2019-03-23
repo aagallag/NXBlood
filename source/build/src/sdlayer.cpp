@@ -303,7 +303,7 @@ void wm_setapptitle(const char *name)
 //
 
 /* XXX: libexecinfo could be used on systems without gnu libc. */
-#if !defined _WIN32 && defined __GNUC__ && !defined __OpenBSD__ && !(defined __APPLE__ && defined __BIG_ENDIAN__) && !defined GEKKO && !defined EDUKE32_TOUCH_DEVICES && !defined __OPENDINGUX__
+#if !defined _WIN32 && defined __GNUC__ && !defined __OpenBSD__ && !(defined __APPLE__ && defined __BIG_ENDIAN__) && !defined GEKKO && !defined(__SWITCH__) && !defined EDUKE32_TOUCH_DEVICES && !defined __OPENDINGUX__
 # define PRINTSTACKONSEGV 1
 # include <execinfo.h>
 #endif
@@ -817,7 +817,7 @@ int32_t initinput(void)
         for (int32_t j = 0; j < i; j++)
             initprintf("  %d. %s\n", j + 1, SDL_JoystickNameForIndex(j));
 
-        joydev = SDL_JoystickOpen(0);
+        joydev = SDL_JoystickOpen(1);
 
         if (joydev)
         {

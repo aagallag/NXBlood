@@ -4,7 +4,7 @@
 
 #ifdef USE_OPENGL
 
-#if !defined GEKKO && !defined EDUKE32_GLES
+#if !defined GEKKO && !defined __SWITCH__ && !defined EDUKE32_GLES
 # define DYNAMIC_GL
 # define DYNAMIC_GLU
 # define DYNAMIC_GLEXT
