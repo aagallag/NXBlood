@@ -155,7 +155,7 @@ void joyReadButtons(int32_t *pResult) { *pResult = appactive ? joystick.bits : 0
 # include <sys/mman.h>
 #endif
 
-#if !defined(NOASM) && !defined(GEKKO) && !defined(__ANDROID__)
+#if !defined(NOASM) && !defined(GEKKO) && !defined(__SWITCH__) && !defined(__ANDROID__)
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -165,7 +165,7 @@ extern "C" {
 #endif
 #endif
 
-#if !defined(NOASM) && !defined(GEKKO) && !defined(__ANDROID__)
+#if !defined(NOASM) && !defined(GEKKO) && !defined(__SWITCH__) && !defined(__ANDROID__)
 static int32_t nx_unprotect(intptr_t beg, intptr_t end, int prot)
 {
 # if defined _WIN32
@@ -247,7 +247,7 @@ void calc_ylookup(int32_t bpl, int32_t lastyidx)
 
 void makeasmwriteable(void)
 {
-#if !defined(NOASM) && !defined(GEKKO) && !defined(__ANDROID__)
+#if !defined(NOASM) && !defined(GEKKO) && !defined(__SWITCH__) && !defined(__ANDROID__)
     nx_unprotect((intptr_t)&dep_begin, (intptr_t)&dep_end, B_PROT_RWX);
 #endif
 }

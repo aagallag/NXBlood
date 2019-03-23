@@ -1549,6 +1549,7 @@ int app_main(int argc, char const * const * argv)
     LoadExtraArts();
 
     levelLoadDefaults();
+
     const char *defsfile = G_DefFile();
     uint32_t stime = timerGetTicks();
     if (!loaddefinitionsfile(defsfile))

@@ -109,7 +109,7 @@ char *Bgethomedir(void)
     return NULL;
 #elif defined EDUKE32_OSX
     return osx_gethomedir();
-#elif defined(GEKKO)
+#elif defined(GEKKO) || defined(__SWITCH__)
     // return current drive's name
     char *drv, cwd[BMAX_PATH] = {0};
     getcwd(cwd, BMAX_PATH);
@@ -602,7 +602,7 @@ uint32_t Bgetsysmemsize(void)
         FreeLibrary(lib);
     }
     else initprintf("Bgetsysmemsize(): unable to load KERNEL32.DLL!\n");
-#elif (defined(_SC_PAGE_SIZE) || defined(_SC_PAGESIZE)) && defined(_SC_PHYS_PAGES) && !defined(GEKKO)
+#elif (defined(_SC_PAGE_SIZE) || defined(_SC_PAGESIZE)) && defined(_SC_PHYS_PAGES) && !defined(GEKKO) && !defined(__SWITCH__)
 #ifdef _SC_PAGE_SIZE
     int64_t const scpagesiz = sysconf(_SC_PAGE_SIZE);
 #else
