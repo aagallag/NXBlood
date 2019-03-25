@@ -815,30 +815,32 @@ int32_t initinput(void)
         initprintf("%d joystick(s) found\n", i);
 
         for (int32_t j = 0; j < i; j++)
-            initprintf("  %d. %s\n", j + 1, SDL_JoystickNameForIndex(j));
-
-        joydev = SDL_JoystickOpen(1);
-
-        if (joydev)
         {
-            SDL_JoystickEventState(SDL_ENABLE);
-            inputdevices |= 4;
+            initprintf("  %d. %s\n", j + 1, SDL_JoystickNameForIndex(j));
+        
+            joydev = SDL_JoystickOpen(j);
 
-            // KEEPINSYNC duke3d/src/gamedefs.h, mact/include/_control.h
-            joystick.numAxes = min(9, SDL_JoystickNumAxes(joydev));
-            joystick.numButtons = min(32, SDL_JoystickNumButtons(joydev));
-            joystick.numHats = min((36-joystick.numButtons)/4,SDL_JoystickNumHats(joydev));
-            initprintf("Joystick 1 has %d axes, %d buttons, and %d hat(s).\n", joystick.numAxes, joystick.numButtons, joystick.numHats);
+            if (joydev)
+            {
+                SDL_JoystickEventState(SDL_ENABLE);
+                inputdevices |= 4;
 
-            joystick.pAxis = (int32_t *)Xcalloc(joystick.numAxes, sizeof(int32_t));
+                // KEEPINSYNC duke3d/src/gamedefs.h, mact/include/_control.h
+                joystick.numAxes = min(9, SDL_JoystickNumAxes(joydev));
+                joystick.numButtons = min(32, SDL_JoystickNumButtons(joydev));
+                joystick.numHats = min((36-joystick.numButtons)/4,SDL_JoystickNumHats(joydev));
+                initprintf("  joystick %d has %d axes, %d buttons, and %d hat(s).\n", j + 1, joystick.numAxes, joystick.numButtons, joystick.numHats);
 
-            if (joystick.numHats)
-                joystick.pHat = (int32_t *)Xcalloc(joystick.numHats, sizeof(int32_t));
+                joystick.pAxis = (int32_t *)Xcalloc(joystick.numAxes, sizeof(int32_t));
 
-            for (i = 0; i < joystick.numHats; i++) joystick.pHat[i] = -1;  // centre
+                if (joystick.numHats)
+                    joystick.pHat = (int32_t *)Xcalloc(joystick.numHats, sizeof(int32_t));
 
-            joydead = (uint16_t *)Xcalloc(joystick.numAxes, sizeof(uint16_t));
-            joysatur = (uint16_t *)Xcalloc(joystick.numAxes, sizeof(uint16_t));
+                for (int f = 0; f < joystick.numHats; f++) joystick.pHat[f] = -1;  // centre
+
+                joydead = (uint16_t *)Xcalloc(joystick.numAxes, sizeof(uint16_t));
+                joysatur = (uint16_t *)Xcalloc(joystick.numAxes, sizeof(uint16_t));
+            }
         }
     }
 
@@ -1852,7 +1854,11 @@ int32_t videoSetGamma(void)
     i = INT32_MIN;
 
     if (sdl_window)
+#ifdef __SWITCH__ // SetWindowGammaRamp is unsupported
+        i = 0;
+#else
         i = SDL_SetWindowGammaRamp(sdl_window, &gammaTable[0], &gammaTable[256], &gammaTable[512]);
+#endif
 
     if (i < 0)
     {
