@@ -1036,9 +1036,11 @@ int32_t initinput(void)
 #if SDL_MAJOR_VERSION >= 2
         LoadSDLControllerDB();
 #endif
-        joydev = SDL_JoystickOpen(1);
+        {
+            joydev = SDL_JoystickOpen(j);
 
         joyScanDevices();
+        }
     }
 
     return 0;
@@ -2038,7 +2040,11 @@ int32_t videoSetGamma(void)
     i = INT32_MIN;
 
     if (sdl_window)
+#ifdef __SWITCH__ // SetWindowGammaRamp is unsupported
+        i = 0;
+#else
         i = SDL_SetWindowGammaRamp(sdl_window, &gammaTable[0], &gammaTable[256], &gammaTable[512]);
+#endif
 
     if (i < 0)
     {

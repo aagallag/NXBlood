@@ -464,6 +464,7 @@ void DeinitSoundDevice(void)
 
 void InitMusicDevice(void)
 {
+#ifndef __SWITCH // the Switch is currently still missing a midi library and freepats are not embeded
     int nStatus;
     if ((nStatus = MUSIC_Init(MusicDevice)) == MUSIC_Ok)
     {
@@ -479,6 +480,7 @@ void InitMusicDevice(void)
     if (hTmb)
         AL_RegisterTimbreBank((unsigned char*)gSoundRes.Load(hTmb));
     MUSIC_SetVolume(MusicVolume);
+#endif
 }
 
 void DeinitMusicDevice(void)
