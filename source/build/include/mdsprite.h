@@ -191,7 +191,7 @@ typedef struct
     int32_t mdnum; //VOX=1, MD2=2, MD3=3. NOTE: must be first in structure!
     int32_t shadeoff;
     float scale, bscale, zadd;
-    uint32_t *texid;    // skins for palettes
+    uint32_t *texid, texid8bit;    // skins for palettes
     int32_t flags;
 
     //VOX specific stuff:
@@ -216,6 +216,11 @@ EXTERN void md3_vox_calcmat_common(const uspritetype *tspr, const vec3f_t *a0, f
 EXTERN int32_t mdpause;
 EXTERN int32_t nextmodelid;
 EXTERN voxmodel_t *voxmodels[MAXVOXELS];
+
+#ifdef USE_GLEXT
+void voxvboalloc(voxmodel_t *vm);
+void voxvbofree(voxmodel_t *vm);
+#endif
 
 void voxfree(voxmodel_t *m);
 voxmodel_t *voxload(const char *filnam);
