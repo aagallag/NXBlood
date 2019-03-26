@@ -381,6 +381,9 @@ RENDERTYPE := SDL
 MIXERTYPE := SDL
 SDL_TARGET := 2
 
+# Joystick options
+ALLJOYSTICKS := 0
+
 # Debugging/Build options
 FORCEDEBUG := 0
 KRANDDEBUG := 0
@@ -423,6 +426,7 @@ else ifeq ($(PLATFORM),SWITCH)
     override NETCODE := 0
     override HAVE_GTK2 := 0
     override HAVE_FLAC := 0
+    override ALLJOYSTICKS := 1
     SDL_TARGET := 2
 else ifeq ($(PLATFORM),$(filter $(PLATFORM),DINGOO GCW QNX SUNOS SYLLABLE))
     override USE_OPENGL := 0
@@ -920,6 +924,9 @@ ifneq (0,$(HAVE_VORBIS))
 endif
 ifneq (0,$(HAVE_FLAC))
     COMPILERFLAGS += -DHAVE_FLAC
+endif
+ifneq (0,$(ALLJOYSTICKS))
+    COMPILERFLAGS += -DALLJOY
 endif
 ifneq (0,$(HAVE_XMP))
     COMPILERFLAGS += -DHAVE_XMP
