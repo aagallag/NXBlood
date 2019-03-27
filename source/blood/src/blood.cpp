@@ -1644,7 +1644,6 @@ int app_main(int argc, char const * const * argv)
     LoadExtraArts();
 
     levelLoadDefaults();
-
     loaddefinitionsfile(BLOODWIDESCREENDEF);
     loaddefinitions_game(BLOODWIDESCREENDEF, FALSE);
 
