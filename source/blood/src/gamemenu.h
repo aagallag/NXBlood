@@ -112,6 +112,7 @@ public:
     virtual void Draw(void) = 0;
     virtual bool Event(CGameMenuEvent &);
     virtual bool MouseEvent(CGameMenuEvent &);
+    virtual bool JoystickEvent(CGameMenuEvent &);
 };
 
 class CGameMenuItemText : public CGameMenuItem
@@ -455,6 +456,7 @@ public:
     void FocusNextItem(void);
     bool IsFocusItem(CGameMenuItem *pItem);
     bool MouseEvent(CGameMenuEvent &event);
+    bool JoystickEvent(CGameMenuEvent &event);
 };
 
 class CGameMenuMgr
