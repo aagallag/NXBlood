@@ -34,6 +34,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "qav.h"
 #include "resource.h"
 #include "view.h"
+#include "joystick.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 CMenuTextMgr gMenuTextMgr;
 CGameMenuMgr gGameMenuMgr;
@@ -223,7 +227,7 @@ void CGameMenuMgr::Process(void)
     event.at0 = 0;
     event.at2 = 0;
     char key;
-    if (!pActiveMenu->MouseEvent(event) && (key = keyGetScan()) != 0 )
+    if (!pActiveMenu->MouseEvent(event) && !pActiveMenu->JoystickEvent(event) && (key = keyGetScan()) != 0 )
     {
         keyFlushScans();
         keyFlushChars();
@@ -436,6 +440,13 @@ bool CGameMenu::MouseEvent(CGameMenuEvent &event)
     return pItemList[m_nFocus]->MouseEvent(event);
 }
 
+bool CGameMenu::JoystickEvent(CGameMenuEvent &event)
+{
+    if (m_nItems <= 0)
+        return true;
+    return pItemList[m_nFocus]->JoystickEvent(event);
+}
+
 CGameMenuItem::CGameMenuItem()
 {
     m_pzText = NULL;
@@ -503,6 +514,51 @@ bool CGameMenuItem::MouseEvent(CGameMenuEvent &event)
         MOUSE_ClearButton(WHEELDOWN_MOUSE);
         event.at0 = kMenuEventDown;
     }
+    return event.at0 != kMenuEventNone;
+}
+
+bool CGameMenuItem::JoystickEvent(CGameMenuEvent &event)
+{
+    event.at0 = kMenuEventNone;
+
+    #ifdef __SWITCH__
+    if (JOYSTICK_GetButtons()&SWITCH_BUTTON_A)
+    {
+        event.at0 = kMenuEventEnter;
+        JOYSTICK_ClearButton(SWITCH_BUTTON_A);
+    }
+    else if (JOYSTICK_GetButtons()&SWITCH_BUTTON_B)
+    {
+        event.at0 = kMenuEventBackSpace;
+        JOYSTICK_ClearButton(SWITCH_BUTTON_B);
+    }
+    else if (JOYSTICK_GetButtons()&SWITCH_BUTTON_PLUS)
+    {
+        event.at0 = kMenuEventDeInit;
+        JOYSTICK_ClearButton(SWITCH_BUTTON_PLUS);
+    }
+    else if (JOYSTICK_GetButtons()&SWITCH_DPAD_UP)
+    {
+        event.at0 = kMenuEventUp;
+        JOYSTICK_ClearButton(SWITCH_DPAD_UP);
+    }
+    else if (JOYSTICK_GetButtons()&SWITCH_DPAD_RIGHT)
+    {
+        event.at0 = kMenuEventRight;
+        JOYSTICK_ClearButton(SWITCH_DPAD_RIGHT);
+    }
+    else if (JOYSTICK_GetButtons()&SWITCH_DPAD_DOWN)
+    {
+        event.at0 = kMenuEventDown;
+        JOYSTICK_ClearButton(SWITCH_DPAD_DOWN);
+    }
+    else if (JOYSTICK_GetButtons()&SWITCH_DPAD_LEFT)
+    {
+        event.at0 = kMenuEventLeft;
+        JOYSTICK_ClearButton(SWITCH_DPAD_LEFT);
+    }
+    #endif
+
     return event.at0 != kMenuEventNone;
 }
 
