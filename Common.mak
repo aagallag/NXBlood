@@ -178,7 +178,7 @@ endif
 
 ifeq ($(PLATFORM),SWITCH)
     APP_TITLE   :=  NXBlood
-    APP_AUTHOR  :=  Sentry/Jan200101
+    APP_AUTHOR  :=  Sentry
     APP_VERSION :=  0.9.0
     APP_ICON    :=  platform/Switch/icon.jpg
 
@@ -608,7 +608,7 @@ else ifeq ($(PLATFORM),SKYOS)
 endif
 ASFLAGS += -f $(ASFORMAT)
 
-#COMPILERFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
+COMPILERFLAGS += -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
 
 
 ##### Optimizations
@@ -1029,7 +1029,7 @@ ifeq (,$(filter $(PLATFORM),WINDOWS WII SWITCH))
         LIBS += -ldl
     endif
     ifneq ($(PLATFORM),DARWIN)
-        #LIBS += -pthread
+        LIBS += -pthread
     endif
 endif
 
