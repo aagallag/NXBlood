@@ -469,7 +469,7 @@ void DeinitSoundDevice(void)
 
 void InitMusicDevice(void)
 {
-#ifndef __SWITCH // the Switch is currently still missing a midi library and freepats are not embeded
+#ifndef __SWITCH__ // the Switch is currently still missing a midi library and freepats is not embeded yet
     int nStatus = MUSIC_Init(MusicDevice, 0);
     if (nStatus != 0)
     {
