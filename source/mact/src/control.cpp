@@ -596,7 +596,7 @@ static void CONTROL_ApplyAxis(int axis, ControlInfo *info, controldevice device)
     switch (map[axis].analogmap)
     {
     case analog_turning:          info->dyaw   += set[axis].analog; break;
-    case analog_strafing:         info->dx     -= set[axis].analog; break;
+    case analog_strafing:         info->dx     += set[axis].analog; break;
     case analog_lookingupanddown: info->dpitch += set[axis].analog; break;
     case analog_elevation:        info->dy     += set[axis].analog; break;
     case analog_rolling:          info->droll  += set[axis].analog; break;
