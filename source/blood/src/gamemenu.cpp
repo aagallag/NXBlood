@@ -36,8 +36,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "view.h"
 #include "joystick.h"
 
-#include <stdio.h>
-#include <stdlib.h>
 
 CMenuTextMgr gMenuTextMgr;
 CGameMenuMgr gGameMenuMgr;
@@ -521,7 +519,7 @@ bool CGameMenuItem::JoystickEvent(CGameMenuEvent &event)
 {
     event.at0 = kMenuEventNone;
 
-    #ifdef __SWITCH__
+#ifdef __SWITCH__
     if (JOYSTICK_GetButtons()&SWITCH_BUTTON_A)
     {
         event.at0 = kMenuEventEnter;
@@ -529,12 +527,12 @@ bool CGameMenuItem::JoystickEvent(CGameMenuEvent &event)
     }
     else if (JOYSTICK_GetButtons()&SWITCH_BUTTON_B)
     {
-        event.at0 = kMenuEventBackSpace;
+        event.at0 = kMenuEventEscape;
         JOYSTICK_ClearButton(SWITCH_BUTTON_B);
     }
     else if (JOYSTICK_GetButtons()&SWITCH_BUTTON_PLUS)
     {
-        event.at0 = kMenuEventDeInit;
+        event.at0 = kMenuEventEscape;
         JOYSTICK_ClearButton(SWITCH_BUTTON_PLUS);
     }
     else if (JOYSTICK_GetButtons()&SWITCH_DPAD_UP)
@@ -557,7 +555,7 @@ bool CGameMenuItem::JoystickEvent(CGameMenuEvent &event)
         event.at0 = kMenuEventLeft;
         JOYSTICK_ClearButton(SWITCH_DPAD_LEFT);
     }
-    #endif
+#endif
 
     return event.at0 != kMenuEventNone;
 }

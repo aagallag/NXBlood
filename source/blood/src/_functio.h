@@ -301,25 +301,26 @@ static const char * joystickdigitaldefaults[MAXJOYDIGITAL] =
 #elif __SWITCH__
 static const char * joystickdefaults[MAXJOYBUTTONSANDHATS] =
    {
-   "Open",           // KEY_A
-   "Jump",           // KEY_B
-   "Inventory_Left",    // KEY_X
-   "Inventory_Right",   // KEY_Y
-   "Run",            // KEY_LSTICK
-   "Crouch",         // KEY_RSTICK
-   "Previous_Weapon",   // KEY_L
-   "Next_Weapon",       // KEY_R
-   "Quick_Kick",     // KEY_ZL
-   "Weapon_Fire",           // KEY_ZR
-   "",
-   "Map",            // KEY_MINUS
-   "",
-   "",
-   "",
-   "",
-   "",
-   "",
-   "",
+   "Open",                 // KEY_A
+   "Jump",                 // KEY_B
+   "",                     // KEY_X
+   "Inventory_Use",        // KEY_Y
+   "Run",                  // KEY_LSTICK
+   "Crouch",               // KEY_RSTICK
+   "Previous_Weapon",      // KEY_L
+   "Next_Weapon",          // KEY_R
+   "Weapon_Special_Fire",  // KEY_ZL
+   "Weapon_Fire",          // KEY_ZR
+   "",  // KEY_START
+   "Map_Toggle",           // KEY_MINUS
+   "Inventory_Left",       // DPAD_LEFT
+   "Holster_Weapon",       // DPAD_UP
+   "Inventory_Right",      // DPAD_RIGHT
+   "Map_Follow_Mode",                     // DPAD_DOWN
+   "",                     // JOY_LEFT
+   "",                     // JOY_UP
+   "",                     // JOY_RIGHT
+   ""                      // JOY_DOWN
    };
 
  static const char * joystickclickeddefaults[MAXJOYBUTTONSANDHATS] =
