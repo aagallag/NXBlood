@@ -1024,8 +1024,8 @@ else ifeq ($(SUBPLATFORM),LINUX)
     LIBS += -lrt
 endif
 
-ifeq (,$(filter $(PLATFORM),WINDOWS WII SWITCH))
-    ifneq ($(PLATFORM),BSD)
+ifeq (,$(filter $(PLATFORM),WINDOWS WII))
+    ifeq (,$(filter $(PLATFORM),BSD SWITCH))
         LIBS += -ldl
     endif
     ifneq ($(PLATFORM),DARWIN)
