@@ -1,5 +1,5 @@
 # NXBlood
-Switch Blood port based on EDuke32
+a homebrew port of NBLood for the Nintendo Switch
 
 ## NBlood
 
@@ -30,12 +30,12 @@ Switch Blood port based on EDuke32
 6. Launch NXBlood
 
 ## Building NXBlood
-# Requirements
+### Requirements
 Make sure to have setup the devkitarm toolchain with devkita64
 install `switch-sdl2 switch-sdl2_mixer switch-libogg switch-libvorbis switch-flac` over pacman
 currently the required libFLAC packaged from pacman has undefined references, compile it yourself from https://github.com/devkitPro/pacman-packages
 
-# Building
+### Building
 run `make PLATFORM=SWITCH`
 
 for various compilation options check the the [EDuke32 Wiki]
