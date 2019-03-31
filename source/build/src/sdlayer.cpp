@@ -831,6 +831,10 @@ void debugprintf(const char *f, ...)
 //
 
 // static int32_t joyblast=0;
+#ifdef ALLJOY
+static SDL_Joystick **joydev = NULL;
+static int32_t joycount;
+#else
 static SDL_Joystick *joydev = NULL;
 #if SDL_MAJOR_VERSION >= 2
 static SDL_GameController *controller = NULL;
@@ -1036,8 +1040,10 @@ int32_t initinput(void)
 #if SDL_MAJOR_VERSION >= 2
         LoadSDLControllerDB();
 #endif
+
+        for (int32_t j = 0; j < joycount; j++)
         {
-            joydev = SDL_JoystickOpen(j);
+            joydev[j] = SDL_JoystickOpen(j);
 
         joyScanDevices();
         }
@@ -1097,6 +1103,7 @@ void uninitinput(void)
         SDL_JoystickClose(joydev);
         joydev = NULL;
     }
+#endif
 }
 
 #ifndef GEKKO
