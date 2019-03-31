@@ -69,6 +69,8 @@ project.xcworkspace/
 *.dSYM/
 
 .DS_Store
+
+/platform/Switch/romfs
 ._*
 /source/voidwrap/sdk/
 
