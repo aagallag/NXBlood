@@ -181,10 +181,9 @@ ifeq ($(PLATFORM),SWITCH)
     APP_AUTHOR  :=  Sentry
     APP_VERSION :=  0.9.0
     APP_ICON    :=  platform/Switch/icon.jpg
+    ROMFS       :=  platform/Switch/romfs
 
     include $(DEVKITPRO)/libnx/switch_rules
-
-    PATH    :=  $(PORTLIBS)/bin:$(PATH)
 
     DEVKITA64 := $(DEVKITPRO)/devkitA64
 
@@ -193,7 +192,6 @@ ifeq ($(PLATFORM),SWITCH)
         override DEVKITA64 := $(subst /c/,C:/,$(DEVKITA64))
     endif
 
-    export PATH := $(DEVKITA64)/bin:$(PATH)
 
     CROSS := aarch64-none-elf-
 
@@ -940,6 +938,8 @@ ifeq ($(RENDERTYPE),SDL)
 
     ifeq ($(PLATFORM),WII)
         SDLCONFIG :=
+    else ifeq ($(SWITCH),SWITCH)
+        SDLCONFIG := $(CROSS)sdl2-config
     else ifeq ($(PLATFORM),SKYOS)
         COMPILERFLAGS += -I/boot/programs/sdk/include/sdl
         SDLCONFIG :=
