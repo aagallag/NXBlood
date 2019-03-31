@@ -764,7 +764,12 @@ void debugprintf(const char *f, ...)
 //
 
 // static int32_t joyblast=0;
+#ifdef ALLJOY
+static SDL_Joystick **joydev = NULL;
+static int32_t joycount;
+#else
 static SDL_Joystick *joydev = NULL;
+#endif
 
 //
 // initinput() -- init input system
@@ -812,24 +817,26 @@ int32_t initinput(void)
     if (!SDL_InitSubSystem(SDL_INIT_JOYSTICK))
     {
 #ifdef ALLJOY
-        i = SDL_NumJoysticks();
+        joycount = SDL_NumJoysticks();
         initprintf("%d joystick(s) found\n", i);
 
-        for (int32_t j = 0; j < i; j++)
+        joydev = new SDL_Joystick*[joycount];
+
+        for (int32_t j = 0; j < joycount; j++)
         {
             initprintf("  %d. %s\n", j + 1, SDL_JoystickNameForIndex(j));
         
-            joydev = SDL_JoystickOpen(j);
+            joydev[j] = SDL_JoystickOpen(j);
 
-            if (joydev)
+            if (joydev[j])
             {
                 SDL_JoystickEventState(SDL_ENABLE);
                 inputdevices |= 4;
 
                 // KEEPINSYNC duke3d/src/gamedefs.h, mact/include/_control.h
-                joystick.numAxes = min(9, SDL_JoystickNumAxes(joydev));
-                joystick.numButtons = min(32, SDL_JoystickNumButtons(joydev));
-                joystick.numHats = min((36-joystick.numButtons)/4,SDL_JoystickNumHats(joydev));
+                joystick.numAxes = min(9, SDL_JoystickNumAxes(joydev[j]));
+                joystick.numButtons = min(32, SDL_JoystickNumButtons(joydev[j]));
+                joystick.numHats = min((36-joystick.numButtons)/4,SDL_JoystickNumHats(joydev[j]));
                 initprintf("  joystick %d has %d axes, %d buttons, and %d hat(s).\n", j + 1, joystick.numAxes, joystick.numButtons, joystick.numHats);
 
                 joystick.pAxis = (int32_t *)Xcalloc(joystick.numAxes, sizeof(int32_t));
@@ -889,11 +896,19 @@ void uninitinput(void)
 #endif
     mouseUninit();
 
+#ifdef ALLJOY
+    for (int32_t j = 0; j < joycount; j++)
+    {
+        SDL_JoystickClose(joydev[j]);
+        joydev[j] = NULL;
+    }
+#else
     if (joydev)
     {
         SDL_JoystickClose(joydev);
         joydev = NULL;
     }
+#endif
 }
 
 #ifndef GEKKO
