@@ -226,7 +226,11 @@ fallback:
     }
 
     {
+#ifdef __SWITCH__
+        static const char *s[] = { "romfs:/freepats.cfg", "/nblood/freepats.cfg", "/nblood/timidity.cfg"};
+#else
         static const char *s[] = { "/etc/timidity.cfg", "/etc/timidity/timidity.cfg", "/etc/timidity/freepats.cfg" };
+#endif
         FILE *fp;
         int32_t i;
 

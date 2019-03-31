@@ -56,3 +56,5 @@ DerivedData/
 *.dSYM/
 
 .DS_Store
+
+/platform/Switch/romfs
