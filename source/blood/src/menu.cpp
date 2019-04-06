@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "screen.h"
 #include "sound.h"
 #include "view.h"
+#include "gamedefs.h"
 
 void SaveGame(CGameMenuItemZEditBitmap *, CGameMenuEvent *);
 
@@ -633,13 +634,18 @@ void SetJoystick1YScale(CGameMenuItemSlider *pItem);
 void SetJoystick2XScale(CGameMenuItemSlider *pItem);
 void SetJoystick2YScale(CGameMenuItemSlider *pItem);
 
+void ResetJoystick1(CGameMenuItemZBool *pItem);
+void ResetJoystick2(CGameMenuItemZBool *pItem);
+
 CGameMenuItemTitle itemOptionsControlJoystickTitle("JOYSTICK SETUP", 1, 160, 20, 2038);
 CGameMenuItemText itemOptionsJoystick1Text("Left Stick", 3, 66, 60, 0);
 CGameMenuItemSlider itemOptionsControlJoystick1XScale("X-SCALE:", 3, 66, 70, 180, (int*)&JoystickAnalogueScale[0], 0, 65536, 1024, SetJoystick1XScale, -1, -1, kMenuSliderQ16);
 CGameMenuItemSlider itemOptionsControlJoystick1YScale("Y-SCALE:", 3, 66, 80, 180, (int*)&JoystickAnalogueScale[1], 0, 65536, 1024, SetJoystick1YScale, -1, -1, kMenuSliderQ16);
-CGameMenuItemText itemOptionsJoystick2Text("Right Stick", 3, 66, 100, 0);
-CGameMenuItemSlider itemOptionsControlJoystick2XScale("X-SCALE:", 3, 66, 110, 180, (int*)&JoystickAnalogueScale[2], 0, 65536, 1024, SetJoystick2XScale, -1, -1, kMenuSliderQ16);
-CGameMenuItemSlider itemOptionsControlJoystick2YScale("Y-SCALE:", 3, 66, 120, 180, (int*)&JoystickAnalogueScale[3], 0, 65536, 1024, SetJoystick2YScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemZBool itemOptionsControlJoystick1Reset("RESET", 3, 66, 90, 180, false, ResetJoystick1, "", "");
+CGameMenuItemText itemOptionsJoystick2Text("Right Stick", 3, 66, 105, 0);
+CGameMenuItemSlider itemOptionsControlJoystick2XScale("X-SCALE:", 3, 66, 115, 180, (int*)&JoystickAnalogueScale[2], 0, 65536, 1024, SetJoystick2XScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemSlider itemOptionsControlJoystick2YScale("Y-SCALE:", 3, 66, 125, 180, (int*)&JoystickAnalogueScale[3], 0, 65536, 1024, SetJoystick2YScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemZBool itemOptionsControlJoystick2Reset("RESET", 3, 66, 135, 180, false, ResetJoystick2, "", "");
 
 void SetupNetworkMenu(void);
 void SetupNetworkHostMenu(CGameMenuItemChain *pItem);
@@ -1266,9 +1272,11 @@ void SetupOptionsMenu(void)
     menuOptionsControlJoystick.Add(&itemOptionsJoystick1Text, false);
     menuOptionsControlJoystick.Add(&itemOptionsControlJoystick1XScale, true);
     menuOptionsControlJoystick.Add(&itemOptionsControlJoystick1YScale, false);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick1Reset, false);
     menuOptionsControlJoystick.Add(&itemOptionsJoystick2Text, false);
-    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick2XScale, true);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick2XScale, false);
     menuOptionsControlJoystick.Add(&itemOptionsControlJoystick2YScale, false);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick2Reset, false);
     menuOptionsControlJoystick.Add(&itemBloodQAV, false);
 
     itemOptionsControlMouseDigitalUp.SetTextArray(pzGamefuncsStrings, NUMGAMEFUNCTIONS+1, 0);
@@ -1935,6 +1943,22 @@ void SetJoystick2YScale(CGameMenuItemSlider *pItem)
 {
     JoystickAnalogueScale[3] = pItem->nValue;
     CONTROL_SetAnalogAxisScale(3, pItem->nValue, controldevice_joystick);
+}
+
+void ResetJoystick1(CGameMenuItemZBool *pItem)
+{
+    JoystickAnalogueScale[0] = DEFAULTJOYSTICKANALOGUESCALE;
+    CONTROL_SetAnalogAxisScale(0, DEFAULTJOYSTICKANALOGUESCALE, controldevice_joystick);
+    JoystickAnalogueScale[1] = DEFAULTJOYSTICKANALOGUESCALE;
+    CONTROL_SetAnalogAxisScale(1, DEFAULTJOYSTICKANALOGUESCALE, controldevice_joystick);
+}
+
+void ResetJoystick2(CGameMenuItemZBool *pItem)
+{
+    JoystickAnalogueScale[2] = DEFAULTJOYSTICKANALOGUESCALE;
+    CONTROL_SetAnalogAxisScale(2, DEFAULTJOYSTICKANALOGUESCALE, controldevice_joystick);
+    JoystickAnalogueScale[3] = DEFAULTJOYSTICKANALOGUESCALE;
+    CONTROL_SetAnalogAxisScale(3, DEFAULTJOYSTICKANALOGUESCALE, controldevice_joystick);
 }
 
 void SetMouseDigitalAxis(CGameMenuItemZCycle *pItem)
