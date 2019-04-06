@@ -635,12 +635,14 @@ CGameMenuItemZEdit itemOptionsPlayerName("PLAYER NAME:", 3, 66, 60, 180, szPlaye
 CGameMenu menuOptionsControlKeyboard;
 CGameMenu menuOptionsControlMouse;
 CGameMenu menuOptionsControlMouseButtonAssignment;
+CGameMenu menuOptionsControlJoystick;
 
 void SetupMouseMenu(CGameMenuItemChain *pItem);
 
 CGameMenuItemTitle itemOptionsControlTitle("CONTROL SETUP", 1, 160, 20, 2038);
 CGameMenuItemChain itemOptionsControlKeyboard("KEYBOARD SETUP", 1, 0, 60, 320, 1, &menuOptionsControlKeyboard, -1, NULL, 0);
 CGameMenuItemChain itemOptionsControlMouse("MOUSE SETUP", 1, 0, 80, 320, 1, &menuOptionsControlMouse, -1, SetupMouseMenu, 0);
+CGameMenuItemChain itemOptionsControlJoystick("CONTROLLER SETUP", 1, 0, 100, 320, 1, &menuOptionsControlJoystick, -1, NULL, 0);
 
 CGameMenuItemTitle itemOptionsControlKeyboardTitle("KEYBOARD SETUP", 1, 160, 20, 2038);
 CGameMenuItemChain itemOptionsControlKeyboardList("Configure Keys...", 1, 0, 60, 320, 1, &menuKeys, -1, NULL, 0);
@@ -669,6 +671,19 @@ CGameMenuItemZCycle itemOptionsControlMouseDigitalUp("DIGITAL UP", 3, 66, 130, 1
 CGameMenuItemZCycle itemOptionsControlMouseDigitalDown("DIGITAL DOWN", 3, 66, 140, 180, 0, SetMouseDigitalAxis, NULL, 0, 0, true);
 CGameMenuItemZCycle itemOptionsControlMouseDigitalLeft("DIGITAL LEFT", 3, 66, 150, 180, 0, SetMouseDigitalAxis, NULL, 0, 0, true);
 CGameMenuItemZCycle itemOptionsControlMouseDigitalRight("DIGITAL RIGHT", 3, 66, 160, 180, 0, SetMouseDigitalAxis, NULL, 0, 0, true);
+
+void SetJoystick1XScale(CGameMenuItemSlider *pItem);
+void SetJoystick1YScale(CGameMenuItemSlider *pItem);
+void SetJoystick2XScale(CGameMenuItemSlider *pItem);
+void SetJoystick2YScale(CGameMenuItemSlider *pItem);
+
+CGameMenuItemTitle itemOptionsControlJoystickTitle("JOYSTICK SETUP", 1, 160, 20, 2038);
+CGameMenuItemText itemOptionsJoystick1Text("Left Stick", 3, 66, 60, 0);
+CGameMenuItemSlider itemOptionsControlJoystick1XScale("X-SCALE:", 3, 66, 70, 180, (int*)&JoystickAnalogueScale[0], 0, 65536, 1024, SetJoystick1XScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemSlider itemOptionsControlJoystick1YScale("Y-SCALE:", 3, 66, 80, 180, (int*)&JoystickAnalogueScale[1], 0, 65536, 1024, SetJoystick1YScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemText itemOptionsJoystick2Text("Right Stick", 3, 66, 100, 0);
+CGameMenuItemSlider itemOptionsControlJoystick2XScale("X-SCALE:", 3, 66, 110, 180, (int*)&JoystickAnalogueScale[2], 0, 65536, 1024, SetJoystick2XScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemSlider itemOptionsControlJoystick2YScale("Y-SCALE:", 3, 66, 120, 180, (int*)&JoystickAnalogueScale[3], 0, 65536, 1024, SetJoystick2YScale, -1, -1, kMenuSliderQ16);
 
 void SetupNetworkMenu(void);
 void SetupNetworkHostMenu(CGameMenuItemChain *pItem);
@@ -1288,6 +1303,7 @@ void SetupOptionsMenu(void)
     menuOptionsControl.Add(&itemOptionsControlTitle, false);
     menuOptionsControl.Add(&itemOptionsControlKeyboard, true);
     menuOptionsControl.Add(&itemOptionsControlMouse, false);
+    menuOptionsControl.Add(&itemOptionsControlJoystick, false);
     menuOptionsControl.Add(&itemBloodQAV, false);
 
     menuOptionsControlKeyboard.Add(&itemOptionsControlKeyboardTitle, false);
@@ -1309,6 +1325,15 @@ void SetupOptionsMenu(void)
     menuOptionsControlMouse.Add(&itemOptionsControlMouseDigitalLeft, false);
     menuOptionsControlMouse.Add(&itemOptionsControlMouseDigitalRight, false);
     menuOptionsControlMouse.Add(&itemBloodQAV, false);
+
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystickTitle, false);
+    menuOptionsControlJoystick.Add(&itemOptionsJoystick1Text, false);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick1XScale, true);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick1YScale, false);
+    menuOptionsControlJoystick.Add(&itemOptionsJoystick2Text, false);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick2XScale, true);
+    menuOptionsControlJoystick.Add(&itemOptionsControlJoystick2YScale, false);
+    menuOptionsControlJoystick.Add(&itemBloodQAV, false);
 
     itemOptionsControlMouseDigitalUp.SetTextArray(pzGamefuncsStrings, NUMGAMEFUNCTIONS+1, 0);
     itemOptionsControlMouseDigitalDown.SetTextArray(pzGamefuncsStrings, NUMGAMEFUNCTIONS+1, 0);
@@ -1497,7 +1522,7 @@ void SetMessages(CGameMenuItemZBool *pItem)
 
 void SetMouseSensitivity(CGameMenuItemSliderFloat *pItem)
 {
-	CONTROL_MouseSensitivity = pItem->fValue;
+    CONTROL_MouseSensitivity = pItem->fValue;
 }
 
 void SetMouseAimFlipped(CGameMenuItemZBool *pItem)
@@ -1975,6 +2000,30 @@ void SetMouseYScale(CGameMenuItemSlider *pItem)
 {
     MouseAnalogueScale[1] = pItem->nValue;
     CONTROL_SetAnalogAxisScale(1, pItem->nValue, controldevice_mouse);
+}
+
+void SetJoystick1XScale(CGameMenuItemSlider *pItem)
+{
+    JoystickAnalogueScale[0] = pItem->nValue;
+    CONTROL_SetAnalogAxisScale(0, pItem->nValue, controldevice_joystick);
+}
+
+void SetJoystick1YScale(CGameMenuItemSlider *pItem)
+{
+    JoystickAnalogueScale[1] = pItem->nValue;
+    CONTROL_SetAnalogAxisScale(1, pItem->nValue, controldevice_joystick);
+}
+
+void SetJoystick2XScale(CGameMenuItemSlider *pItem)
+{
+    JoystickAnalogueScale[2] = pItem->nValue;
+    CONTROL_SetAnalogAxisScale(2, pItem->nValue, controldevice_joystick);
+}
+
+void SetJoystick2YScale(CGameMenuItemSlider *pItem)
+{
+    JoystickAnalogueScale[3] = pItem->nValue;
+    CONTROL_SetAnalogAxisScale(3, pItem->nValue, controldevice_joystick);
 }
 
 void SetMouseDigitalAxis(CGameMenuItemZCycle *pItem)
