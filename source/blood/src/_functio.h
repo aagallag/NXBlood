@@ -316,11 +316,7 @@ static const char * joystickdefaults[MAXJOYBUTTONSANDHATS] =
    "Inventory_Left",       // DPAD_LEFT
    "Holster_Weapon",       // DPAD_UP
    "Inventory_Right",      // DPAD_RIGHT
-   "Map_Follow_Mode",                     // DPAD_DOWN
-   "",                     // JOY_LEFT
-   "",                     // JOY_UP
-   "",                     // JOY_RIGHT
-   ""                      // JOY_DOWN
+   "Map_Follow_Mode",      // DPAD_DOWN
    };
 
  static const char * joystickclickeddefaults[MAXJOYBUTTONSANDHATS] =
