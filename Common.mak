@@ -179,7 +179,7 @@ endif
 ifeq ($(PLATFORM),SWITCH)
     APP_TITLE   :=  NXBlood
     APP_AUTHOR  :=  Sentry
-    APP_VERSION :=  0.9.2
+    APP_VERSION :=  0.9.3
 
     APP_ICON    :=  platform/Switch/icon.jpg
     ROMFS       :=  platform/Switch/romfs
