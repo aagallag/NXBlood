@@ -532,7 +532,7 @@ bool CGameMenuItem::JoystickEvent(CGameMenuEvent &event)
     }
     else if (JOYSTICK_GetButtons()&SWITCH_BUTTON_PLUS)
     {
-        event.at0 = kMenuEventEscape;
+        event.at0 = kMenuEventEnter;
         JOYSTICK_ClearButton(SWITCH_BUTTON_PLUS);
     }
     else if (JOYSTICK_GetButtons()&SWITCH_DPAD_UP)
