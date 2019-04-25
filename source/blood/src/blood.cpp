@@ -585,11 +585,11 @@ void StartLevel(GAMEOPTIONS *gameOptions)
         if (pSprite->statnum < kMaxStatus && pSprite->extra > 0)
         {
             XSPRITE *pXSprite = &xsprite[pSprite->extra];
-            if ((pXSprite->ate_7&(1<<gameOptions->nDifficulty))
-            || (pXSprite->atf_4 && gameOptions->nGameType == 0)
-            || (pXSprite->atf_5 && gameOptions->nGameType == 2)
-            || (pXSprite->atb_7 && gameOptions->nGameType == 3)
-            || (pXSprite->atf_6 && gameOptions->nGameType == 1))
+            if ((pXSprite->lSkill&(1<<gameOptions->nDifficulty))
+            || (pXSprite->lS && gameOptions->nGameType == 0)
+            || (pXSprite->lB && gameOptions->nGameType == 2)
+            || (pXSprite->lT && gameOptions->nGameType == 3)
+            || (pXSprite->lC && gameOptions->nGameType == 1))
                 DeleteSprite(i);
         }
     }
@@ -602,6 +602,21 @@ void StartLevel(GAMEOPTIONS *gameOptions)
         gStartZone[i].z = startpos.z;
         gStartZone[i].sectnum = startsectnum;
         gStartZone[i].ang = startang;
+
+        // By NoOne: Create spawn zones for players in teams mode.
+        if (i <= kMaxPlayers / 2) {
+            gStartZoneTeam1[i].x = startpos.x;
+            gStartZoneTeam1[i].y = startpos.y;
+            gStartZoneTeam1[i].z = startpos.z;
+            gStartZoneTeam1[i].sectnum = startsectnum;
+            gStartZoneTeam1[i].ang = startang;
+
+            gStartZoneTeam2[i].x = startpos.x;
+            gStartZoneTeam2[i].y = startpos.y;
+            gStartZoneTeam2[i].z = startpos.z;
+            gStartZoneTeam2[i].sectnum = startsectnum;
+            gStartZoneTeam2[i].ang = startang;
+        }
     }
     InitSectorFX();
     warpInit();
@@ -1355,12 +1370,6 @@ void ParseOptions(void)
 
 void ClockStrobe()
 {
-    if (handleevents() && quitevent)
-    {
-        KB_KeyDown[sc_Escape] = 1;
-        quitevent = 0;
-    }
-    MUSIC_Update();
     gGameClock++;
 }
 
@@ -1620,7 +1629,13 @@ RESTART:
     ready2send = 1;
     while (!gQuitGame)
     {
+        if (handleevents() && quitevent)
+        {
+            KB_KeyDown[sc_Escape] = 1;
+            quitevent = 0;
+        }
         netUpdate();
+        MUSIC_Update();
         CONTROL_BindsEnabled = gInputMode == INPUT_MODE_0;
         switch (gInputMode)
         {
@@ -2397,4 +2412,16 @@ void LoadExtraArts(void)
     {
         LoadArtFile(pINISelected->pDescription->pzArts[i]);
     }
+}
+
+bool isDemoRecords(void) {
+    return gDemo.at1;
+}
+
+bool isOriginalDemo() {
+    return gDemo.m_bLegacy && gDemo.at0;
+}
+
+bool fileExistsRFF(int id, const char *ext) {
+    return gSysRes.Lookup(id, ext);
 }

@@ -122,6 +122,7 @@ int32_t gltexmiplevel = 0;		// discards this many mipmap levels
 int32_t glprojectionhacks = 1;
 static GLuint polymosttext = 0;
 int32_t glrendmode = REND_POLYMOST;
+int32_t r_shadeinterpolate = 1;
 
 // This variable, and 'shadeforfullbrightpass' control the drawing of
 // fullbright tiles.  Also see 'fullbrightloadingpass'.
@@ -214,6 +215,8 @@ static float polymost1RotMatrix[16] = { 1.f, 0.f, 0.f, 0.f,
                                         0.f, 1.f, 0.f, 0.f,
                                         0.f, 0.f, 1.f, 0.f,
                                         0.f, 0.f, 0.f, 1.f };
+static GLint polymost1ShadeInterpolateLoc = -1;
+static float polymost1ShadeInterpolate = 1.f;
 
 static inline float float_trans(uint32_t maskprops, uint8_t blend)
 {
@@ -630,6 +633,7 @@ static void polymost_setCurrentShaderProgram(uint32_t programID)
     polymost1NPOTEmulationFactorLoc = glGetUniformLocation(polymost1CurrentShaderProgramID, "u_npotEmulationFactor");
     polymost1NPOTEmulationXOffsetLoc = glGetUniformLocation(polymost1CurrentShaderProgramID, "u_npotEmulationXOffset");
     polymost1RotMatrixLoc = glGetUniformLocation(polymost1CurrentShaderProgramID, "u_rotMatrix");
+    polymost1ShadeInterpolateLoc = glGetUniformLocation(polymost1CurrentShaderProgramID, "u_shadeInterpolate");
 
     //set the uniforms to the current values
     glUniform4f(polymost1TexturePosSizeLoc, polymost1TexturePosSize.x, polymost1TexturePosSize.y, polymost1TexturePosSize.z, polymost1TexturePosSize.w);
@@ -648,6 +652,7 @@ static void polymost_setCurrentShaderProgram(uint32_t programID)
     glUniform1f(polymost1NPOTEmulationFactorLoc, polymost1NPOTEmulationFactor);
     glUniform1f(polymost1NPOTEmulationXOffsetLoc, polymost1NPOTEmulationXOffset);
     glUniformMatrix4fv(polymost1RotMatrixLoc, 1, false, polymost1RotMatrix);
+    glUniform1f(polymost1ShadeInterpolateLoc, polymost1ShadeInterpolate);
 }
 
 void polymost_setTexturePosSize(vec4f_t const &texturePosSize)
@@ -811,6 +816,15 @@ void polymost_npotEmulation(char npotEmulation, float factor, float xOffset)
         glUniform1f(polymost1NPOTEmulationFactorLoc, polymost1NPOTEmulationFactor);
         polymost1NPOTEmulationXOffset = xOffset;
         glUniform1f(polymost1NPOTEmulationXOffsetLoc, polymost1NPOTEmulationXOffset);
+    }
+}
+
+void polymost_shadeInterpolate(int32_t shadeInterpolate)
+{
+    if (currentShaderProgramID == polymost1CurrentShaderProgramID)
+    {
+        polymost1ShadeInterpolate = shadeInterpolate;
+        glUniform1f(polymost1ShadeInterpolateLoc, polymost1ShadeInterpolate);
     }
 }
 
@@ -1134,6 +1148,7 @@ void polymost_glinit()
          uniform float u_npotEmulation;\n\
          uniform float u_npotEmulationFactor;\n\
          uniform float u_npotEmulationXOffset;\n\
+         uniform float u_shadeInterpolate;\n\
          \n\
          varying vec4 v_color;\n\
          varying float v_distance;\n\
@@ -1162,11 +1177,16 @@ void polymost_glinit()
              texCoord = clamp(u_texturePosSize.zw*texCoord, u_halfTexelSize, u_texturePosSize.zw-u_halfTexelSize);\n\
              vec4 color = texture2D(s_texture, u_texturePosSize.xy+texCoord);\n\
              \n\
-             float shade = clamp(floor(u_shade+u_visFactor*v_distance), c_zero, u_numShades-c_one)/u_numShades;\n\
-             float colorIndex = texture2D(s_palswap, u_palswapPos+u_palswapSize*vec2(color.r, shade)).r;\n\
+             float shade = clamp((u_shade+u_visFactor*v_distance), c_zero, u_numShades-c_one);\n\
+             float shadeFrac = mod(shade, c_one);\n\
+             float colorIndex = texture2D(s_palswap, u_palswapPos+u_palswapSize*vec2(color.r, floor(shade)/u_numShades)).r;\n\
              colorIndex = c_basepalOffset + c_basepalScale*colorIndex;\n\
              vec4 palettedColor = texture2D(s_palette, vec2(colorIndex, c_zero));\n\
-             float fullbright = u_usePalette*palettedColor.a;\n\
+             colorIndex = texture2D(s_palswap, u_palswapPos+u_palswapSize*vec2(color.r, (floor(shade)+c_one)/u_numShades)).r;\n\
+             colorIndex = c_basepalOffset + c_basepalScale*colorIndex;\n\
+             vec4 palettedColorNext = texture2D(s_palette, vec2(colorIndex, c_zero));\n\
+             palettedColor.rgb = mix(palettedColor.rgb, palettedColorNext.rgb, shadeFrac*u_shadeInterpolate);\n\
+             float fullbright = mix(u_usePalette*palettedColor.a, c_zero, u_useColorOnly);\n\
              palettedColor.a = c_one-floor(color.r);\n\
              color = mix(color, palettedColor, u_usePalette);\n\
              \n\
@@ -1187,7 +1207,7 @@ void polymost_glinit()
              \n\
              color.a *= v_color.a;\n\
              \n\
-             gl_FragColor = color;\n\
+             gl_FragData[0] = color;\n\
          }\n";
     const char* const POLYMOST1_EXTENDED_FRAGMENT_SHADER_CODE =
         "#version 110\n\
@@ -1218,6 +1238,7 @@ void polymost_glinit()
          uniform float u_npotEmulation;\n\
          uniform float u_npotEmulationFactor;\n\
          uniform float u_npotEmulationXOffset;\n\
+         uniform float u_shadeInterpolate;\n\
          \n\
          uniform float u_useDetailMapping;\n\
          uniform float u_useGlowMapping;\n\
@@ -1249,11 +1270,16 @@ void polymost_glinit()
              texCoord = clamp(u_texturePosSize.zw*texCoord, u_halfTexelSize, u_texturePosSize.zw-u_halfTexelSize);\n\
              vec4 color = texture2D(s_texture, u_texturePosSize.xy+texCoord);\n\
              \n\
-             float shade = clamp(floor(u_shade+u_visFactor*v_distance), c_zero, u_numShades-c_one)/u_numShades;\n\
-             float colorIndex = texture2D(s_palswap, u_palswapPos+u_palswapSize*vec2(color.r, shade)).r;\n\
+             float shade = clamp((u_shade+u_visFactor*v_distance), c_zero, u_numShades-c_one);\n\
+             float shadeFrac = mod(shade, c_one);\n\
+             float colorIndex = texture2D(s_palswap, u_palswapPos+u_palswapSize*vec2(color.r, floor(shade)/u_numShades)).r;\n\
              colorIndex = c_basepalOffset + c_basepalScale*colorIndex;\n\
              vec4 palettedColor = texture2D(s_palette, vec2(colorIndex, c_zero));\n\
-             float fullbright = u_usePalette*palettedColor.a;\n\
+             colorIndex = texture2D(s_palswap, u_palswapPos+u_palswapSize*vec2(color.r, (floor(shade)+c_one)/u_numShades)).r;\n\
+             colorIndex = c_basepalOffset + c_basepalScale*colorIndex;\n\
+             vec4 palettedColorNext = texture2D(s_palette, vec2(colorIndex, c_zero));\n\
+             palettedColor.rgb = mix(palettedColor.rgb, palettedColorNext.rgb, shadeFrac*u_shadeInterpolate);\n\
+             float fullbright = mix(u_usePalette*palettedColor.a, c_zero, u_useColorOnly);\n\
              palettedColor.a = c_one-floor(color.r);\n\
              color = mix(color, palettedColor, u_usePalette);\n\
              \n\
@@ -1281,7 +1307,7 @@ void polymost_glinit()
              \n\
              color.a *= v_color.a;\n\
              \n\
-             gl_FragColor = color;\n\
+             gl_FragData[0] = color;\n\
          }\n";
 
     polymost1BasicShaderProgramID = glCreateProgram();
@@ -2204,7 +2230,7 @@ static void gloadtile_art_indexed(int32_t dapic, int32_t dameth, pthtyp *pth, in
     pth->palnum = 0;
     pth->shade = 0;
     pth->effects = 0;
-    pth->flags = TO_PTH_CLAMPED(dameth) | TO_PTH_NOTRANSFIX(dameth) | PTH_HASALPHA | (npoty*PTH_NPOTWALL) | PTH_INDEXED;
+    pth->flags = TO_PTH_CLAMPED(dameth) | TO_PTH_NOTRANSFIX(dameth) | (PTH_HASALPHA|PTH_ONEBITALPHA) | (npoty*PTH_NPOTWALL) | PTH_INDEXED;
     pth->hicr = NULL;
 }
 
@@ -2410,7 +2436,7 @@ void gloadtile_art(int32_t dapic, int32_t dapal, int32_t tintpalnum, int32_t das
     pth->palnum = dapal;
     pth->shade = dashade;
     pth->effects = 0;
-    pth->flags = TO_PTH_CLAMPED(dameth) | TO_PTH_NOTRANSFIX(dameth) | (hasalpha*PTH_HASALPHA) | (npoty*PTH_NPOTWALL);
+    pth->flags = TO_PTH_CLAMPED(dameth) | TO_PTH_NOTRANSFIX(dameth) | (hasalpha*(PTH_HASALPHA|PTH_ONEBITALPHA)) | (npoty*PTH_NPOTWALL);
     pth->hicr = NULL;
 
 #if defined USE_GLEXT && !defined EDUKE32_GLES
@@ -2479,6 +2505,7 @@ int32_t gloadtile_hi(int32_t dapic,int32_t dapalnum, int32_t facen, hicreplctyp 
 
     int32_t startticks = timerGetTicks(), willprint = 0;
 
+    char onebitalpha = 1;
     char hasalpha;
     texcacheheader cachead;
     char texcacheid[BMAX_PATH];
@@ -2604,7 +2631,6 @@ int32_t gloadtile_hi(int32_t dapic,int32_t dapalnum, int32_t facen, hicreplctyp 
         int32_t b = (glinfo.bgra) ? tint.b : tint.r;
 
         char al = 255;
-        char onebitalpha = 1;
 
         for (bssize_t y = 0, j = 0; y < tsiz.y; ++y, j += siz.x)
         {
@@ -2663,6 +2689,7 @@ int32_t gloadtile_hi(int32_t dapic,int32_t dapalnum, int32_t facen, hicreplctyp 
         }
 
         hasalpha = (al != 255);
+        onebitalpha &= hasalpha;
 
         if ((!(dameth & DAMETH_CLAMPED)) || facen) //Duplicate texture pixels (wrapping tricks for non power of 2 texture sizes)
         {
@@ -2727,6 +2754,7 @@ int32_t gloadtile_hi(int32_t dapic,int32_t dapalnum, int32_t facen, hicreplctyp 
     pth->effects = effect;
     pth->flags = TO_PTH_CLAMPED(dameth) | TO_PTH_NOTRANSFIX(dameth) |
                  PTH_HIGHTILE | ((facen>0) * PTH_SKYBOX) |
+                 (onebitalpha ? PTH_ONEBITALPHA : 0) |
                  (hasalpha ? PTH_HASALPHA : 0) |
                  ((hicr->flags & HICR_FORCEFILTER) ? PTH_FORCEFILTER : 0);
     pth->skyface = facen;
@@ -2822,6 +2850,41 @@ static inline pthtyp *our_texcache_fetch(int32_t dameth)
 
     // r_usetileshades 1 is TX's method.
     return texcache_fetch(globalpicnum, globalpal, getpalookup((r_usetileshades == 1 && !(globalflags & GLOBAL_NO_GL_TILESHADES)) ? globvis>>3 : 0, globalshade), dameth);
+}
+
+int32_t polymost_maskWallHasTranslucency(uwalltype const * const wall)
+{
+    if (wall->cstat & CSTAT_WALL_TRANSLUCENT)
+        return true;
+ 
+    //POGO: only hightiles may have translucency in their texture
+    if (!usehightile)
+        return false;
+ 
+    uint8_t pal = wall->pal;
+    if (palookup[pal] == NULL)
+        pal = 0;
+ 
+    pthtyp* pth = texcache_fetch(wall->picnum, pal, 0, DAMETH_MASK | DAMETH_WALL);
+    return pth && (pth->flags & PTH_HASALPHA) && !(pth->flags & PTH_ONEBITALPHA);
+}
+
+int32_t polymost_spriteHasTranslucency(uspritetype const * const tspr)
+{
+    if ((tspr->cstat & (CSTAT_SPRITE_TRANSLUCENT | CSTAT_SPRITE_RESERVED1)) ||
+        spriteext[tspr->owner].alpha)
+        return true;
+ 
+    //POGO: only hightiles may have translucency in their texture
+    if (!usehightile)
+        return false;
+ 
+    uint8_t pal = tspr->shade;
+    if (palookup[pal] == NULL)
+        pal = 0;
+ 
+    pthtyp* pth = texcache_fetch(tspr->picnum, pal, 0, DAMETH_MASK | DAMETH_CLAMPED);
+    return pth && (pth->flags & PTH_HASALPHA) && !(pth->flags & PTH_ONEBITALPHA);
 }
 
 static void polymost2_drawVBO(GLenum mode,
@@ -5799,6 +5862,8 @@ void polymost_drawrooms()
 
     resizeglcheck();
 
+    polymost_shadeInterpolate(r_shadeinterpolate);
+
     //global cos/sin height angle
     float r = (float)(ydimen>>1) - (ghoriz + ghorizcorrect);
     gshang = r/Bsqrtf(r*r+ghalfx*ghalfx);
@@ -8413,6 +8478,7 @@ void polymost_initosdfuncs(void)
 #endif
         { "r_vertexarrays","enable/disable using vertex arrays when drawing models",(void *) &r_vertexarrays, CVAR_BOOL, 0, 1 },
         { "r_projectionhack", "enable/disable projection hack", (void *) &glprojectionhacks, CVAR_INT, 0, 1 },
+        { "r_shadeinterpolate", "enable/disable shade interpolation", (void *) &r_shadeinterpolate, CVAR_INT, 0, 1 },
 
 #ifdef POLYMER
         // polymer cvars
