@@ -138,9 +138,9 @@ int32_t r_animsmoothing = 1;
 int32_t r_downsize = 0;
 int32_t r_downsizevar = -1;
 
-int r_rortexture = 0;
-int r_rortexturerange = 0;
-int r_rorphase = 0;
+int32_t r_rortexture = 0;
+int32_t r_rortexturerange = 0;
+int32_t r_rorphase = 0;
 
 // used for fogcalc
 static float fogresult, fogresult2;
@@ -5929,7 +5929,7 @@ void polymost_drawrooms()
 
     if (n < 3) { videoEndDrawing(); return; }
 
-    float sx[4], sy[4];
+    float sx[6], sy[6];
 
     for (bssize_t i = 0; i < n; i++)
     {
