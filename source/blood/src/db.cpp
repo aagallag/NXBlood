@@ -925,7 +925,7 @@ void dbLoadMap(const char *pPath, int *pX, int *pY, int *pZ, short *pAngle, shor
             pXSector->at30_1 = bitReader.readUnsigned(8);
             pXSector->at31_1 = bitReader.readUnsigned(8);
             pXSector->at32_1 = bitReader.readUnsigned(8);
-            pXSector->at33_1 = bitReader.readUnsigned(3);
+            pXSector->damageType = bitReader.readUnsigned(3);
             pXSector->floorpal = bitReader.readUnsigned(4);
             pXSector->at34_0 = bitReader.readUnsigned(8);
             pXSector->locked = bitReader.readUnsigned(1);
@@ -1046,6 +1046,12 @@ void dbLoadMap(const char *pPath, int *pX, int *pY, int *pZ, short *pAngle, shor
         pSprite->hitag = B_LITTLE16(pSprite->hitag);
         pSprite->extra = B_LITTLE16(pSprite->extra);
 #endif
+        // NoOne's extension bit
+        if (pSprite->hitag&1)
+        {
+            pSprite->hitag &= ~1;
+            pSprite->hitag |= kHitagExtBit;
+        }
         InsertSpriteSect(i, sprite[i].sectnum);
         InsertSpriteStat(i, sprite[i].statnum);
         sprite[i].index = i;
@@ -1111,7 +1117,7 @@ void dbLoadMap(const char *pPath, int *pX, int *pY, int *pZ, short *pAngle, shor
             pXSprite->goalAng = bitReader.readUnsigned(11);
             pXSprite->dodgeDir = bitReader.readSigned(2);
             pXSprite->locked = bitReader.readUnsigned(1);
-            pXSprite->palette = bitReader.readUnsigned(2);
+            pXSprite->medium = bitReader.readUnsigned(2);
             pXSprite->respawn = bitReader.readUnsigned(2);
             pXSprite->data4 = bitReader.readUnsigned(16);
             pXSprite->at1a_2 = bitReader.readUnsigned(6);

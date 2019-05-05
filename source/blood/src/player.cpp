@@ -769,6 +769,7 @@ void playerStart(int nPlayer)
     pPlayer->atc3 = 0;
     pPlayer->at26 = -1;
     pPlayer->at376 = 0;
+    pPlayer->nWaterPal = 0;
     for (int i = 0; i < kMaxPowerUps; i++)
         pPlayer->at202[i] = 0;
     if (pPlayer == gMe)
@@ -781,7 +782,7 @@ void playerStart(int nPlayer)
     if (IsUnderwaterSector(pSprite->sectnum))
     {
         pPlayer->at2f = 1;
-        pPlayer->pXSprite->palette = 1;
+        pPlayer->pXSprite->medium = 1;
     }
 }
 
@@ -1963,7 +1964,7 @@ int playerDamageSprite(int nSource, PLAYER *pPlayer, DAMAGE_TYPE nDamageType, in
                 nSound = pDamageInfo->at4[0];
             else
                 nSound = pDamageInfo->at4[Random(3)];
-            if (nDamageType == DAMAGE_TYPE_4 && pXSprite->palette == 1 && !pPlayer->at376)
+            if (nDamageType == DAMAGE_TYPE_4 && pXSprite->medium == 1 && !pPlayer->at376)
                 nSound = 714;
             sfxPlay3DSound(pSprite, nSound, 0, 6);
             return nDamage;

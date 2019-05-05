@@ -56,7 +56,6 @@ void fullscreen_tint_gl(uint8_t r, uint8_t g, uint8_t b, uint8_t f)
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);
     polymost_setFogEnabled(false);
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -80,6 +79,8 @@ int32_t tint_blood_r = 0, tint_blood_g = 0, tint_blood_b = 0;
 
 void fullscreen_tint_gl_blood(void)
 {
+    if (!(tint_blood_r|tint_blood_g|tint_blood_b))
+        return;
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -89,7 +90,6 @@ void fullscreen_tint_gl_blood(void)
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);
     polymost_setFogEnabled(false);
 
     glBlendFunc(GL_ONE, GL_ONE);
