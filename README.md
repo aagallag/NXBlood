@@ -54,9 +54,10 @@ for various compilation options check the the [EDuke32 Wiki]
 
 ### Additional programming:
   * sirlemonhead
+  * NoOne
   
 ### Widescreen tiles & NBlood logo:
   * Maxi Clouds
   
 ### Special thanks:
-  * NY00123, MetHy, Striker, oasiz, Mblackwell, Zombie, Marphy Black, SAmik37, meleemario
+  * NY00123, MetHy, Striker, oasiz, Mblackwell, Zombie, Marphy Black, SAmik37, meleemario and contributors
