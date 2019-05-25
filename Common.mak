@@ -178,7 +178,7 @@ endif
 
 ifeq ($(PLATFORM),SWITCH)
     APP_TITLE   :=  NXBlood
-    APP_AUTHOR  :=  Sentry
+    APP_AUTHOR  :=  Sentry, Nuke.YKT
     APP_VERSION :=  0.9.4
 
     APP_ICON    :=  platform/Switch/icon.jpg

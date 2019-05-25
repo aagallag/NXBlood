@@ -27,7 +27,7 @@ install `switch-sdl2 switch-sdl2_mixer switch-libogg switch-libvorbis switch-fla
 currently the required libFLAC packaged from pacman has undefined references, compile it yourself from https://github.com/devkitPro/pacman-packages
 
 ### Building
-run `make PLATFORM=SWITCH`
+run `PATH=$DEVKITPRO/portlibs/switch/bin:$PATH make PLATFORM=SWITCH`
 
 for various compilation options check the the [EDuke32 Wiki]
 
