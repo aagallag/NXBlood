@@ -51,7 +51,11 @@ void clearGrpNamePtr(void)
 
 const char *G_DefaultGrpFile(void)
 {
+#ifdef __SWITCH__
+    return "romfs:/nblood.pk3";
+#else
     return "nblood.pk3";
+#endif
 }
 
 const char *G_DefaultDefFile(void)
