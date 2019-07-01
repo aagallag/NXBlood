@@ -1057,7 +1057,7 @@ ifneq ($$(NACPTOOL),)
 	$$(NACPTOOL) --create "$$(APP_TITLE)" "$$(APP_AUTHOR)" "$$(APP_VERSION)" "$$($1_$2).nacp"
 endif
 ifneq ($$(ELF2NRO),)
-	$$(ELF2NRO) $$@ $$($1_$2)$$(DOLSUFFIX) --icon=$$(APP_ICON) --nacp=$$($1_$2).nacp --romfsdir=$$(ROMFS)
+	$$(ELF2NRO) $$@ $$($1_$2)$$(DOLSUFFIX) --icon=platform/Switch/$$($1_$2)/icon.jpg --nacp=$$($1_$2).nacp --romfsdir=platform/Switch/$$($1_$2)/romfs
 endif
 endif
 ifneq ($$(STRIP),)

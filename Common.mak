@@ -179,10 +179,7 @@ endif
 ifeq ($(PLATFORM),SWITCH)
     APP_TITLE   :=  NXBlood
     APP_AUTHOR  :=  Sentry, Nuke.YKT
-    APP_VERSION :=  0.9.5
-
-    APP_ICON    :=  platform/Switch/icon.jpg
-    ROMFS       :=  platform/Switch/romfs
+    APP_VERSION :=  0.9.6
 
     include $(DEVKITPRO)/libnx/switch_rules
 
