@@ -643,7 +643,7 @@ void SetupMouseMenu(CGameMenuItemChain *pItem);
 CGameMenuItemTitle itemOptionsControlTitle("CONTROL SETUP", 1, 160, 20, 2038);
 CGameMenuItemChain itemOptionsControlKeyboard("KEYBOARD SETUP", 1, 0, 60, 320, 1, &menuOptionsControlKeyboard, -1, NULL, 0);
 CGameMenuItemChain itemOptionsControlMouse("MOUSE SETUP", 1, 0, 80, 320, 1, &menuOptionsControlMouse, -1, SetupMouseMenu, 0);
-CGameMenuItemChain itemOptionsControlJoystick("CONTROLLER SETUP", 1, 0, 100, 320, 1, &menuOptionsControlJoystick, -1, NULL, 0);
+CGameMenuItemChain itemOptionsControlJoystick("GAMEPAD SETUP", 1, 0, 100, 320, 1, &menuOptionsControlJoystick, -1, NULL, 0);
 
 CGameMenuItemTitle itemOptionsControlKeyboardTitle("KEYBOARD SETUP", 1, 160, 20, 2038);
 CGameMenuItemChain itemOptionsControlKeyboardList("Configure Keys...", 1, 0, 60, 320, 1, &menuKeys, -1, NULL, 0);
@@ -681,7 +681,7 @@ void SetJoystick2YScale(CGameMenuItemSlider *pItem);
 void ResetJoystick1(CGameMenuItemZBool *pItem);
 void ResetJoystick2(CGameMenuItemZBool *pItem);
 
-CGameMenuItemTitle itemOptionsControlJoystickTitle("JOYSTICK SETUP", 1, 160, 20, 2038);
+CGameMenuItemTitle itemOptionsControlJoystickTitle("GAMEPAD SETUP", 1, 160, 20, 2038);
 CGameMenuItemText itemOptionsJoystick1Text("Left Stick", 3, 66, 60, 0);
 CGameMenuItemSlider itemOptionsControlJoystick1XScale("X-SCALE:", 3, 66, 70, 180, (int*)&JoystickAnalogueScale[0], 0, 65536, 1024, SetJoystick1XScale, -1, -1, kMenuSliderQ16);
 CGameMenuItemSlider itemOptionsControlJoystick1YScale("Y-SCALE:", 3, 66, 80, 180, (int*)&JoystickAnalogueScale[1], 0, 65536, 1024, SetJoystick1YScale, -1, -1, kMenuSliderQ16);
