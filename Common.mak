@@ -617,9 +617,9 @@ else ifeq ($(PLATFORM), SWITCH)
     LIBNX_INC := $(LIBNX)/include
     LIBNX_LIB := $(LIBNX)/lib
 
-    COMPILERFLAGS += -I$(LIBNX_INC)
+    COMPILERFLAGS += -I$(LIBNX_INC) -I$(PORTLIBS)/include/opus -I$(PORTLIBS)/include
     LINKERFLAGS += -specs=$(DEVKITPRO)/libnx/switch.specs
-    LIBDIRS += -L$(LIBNX_LIB)
+    LIBDIRS += -L$(LIBNX_LIB) -L$(PORTLIBS)/lib
     COMMONFLAGS += -fPIE
 else ifeq ($(PLATFORM),$(filter $(PLATFORM),DINGOO GCW))
     COMPILERFLAGS += -D__OPENDINGUX__
@@ -1004,8 +1004,6 @@ ifeq ($(RENDERTYPE),SDL)
 
     ifeq ($(PLATFORM),WII)
         SDLCONFIG :=
-    else ifeq ($(SWITCH),SWITCH)
-        SDLCONFIG := $(CROSS)sdl2-config
     else ifeq ($(PLATFORM),SKYOS)
         COMPILERFLAGS += -I/boot/programs/sdk/include/sdl
         SDLCONFIG :=
@@ -1078,7 +1076,7 @@ else ifeq ($(PLATFORM),SUNOS)
 else ifeq ($(PLATFORM),WII)
     LIBS += -laesnd_tueidj -lfat -lwiiuse -lbte -lwiikeyboard -logc
 else ifeq ($(PLATFORM),SWITCH)
-    LIBS +=  -lFLAC -lmpg123 -lmodplug -lvorbisidec -lvorbisfile -lvorbis -logg -lnx 
+    LIBS +=  -lFLAC -lmpg123 -lmodplug -lvorbisidec -lvorbisfile -lvorbis -logg -lopus -lopusfile -lnx
 else ifeq ($(SUBPLATFORM),LINUX)
     LIBS += -lrt
 endif
