@@ -33,7 +33,6 @@ a homebrew port of NBLood for the Nintendo Switch
 ### Requirements
 Make sure to have setup the devkitarm toolchain with devkita64
 install `switch-sdl2 switch-sdl2_mixer switch-libogg switch-libvorbis switch-flac` over pacman
-currently the required libFLAC packaged from pacman has undefined references, compile it yourself from https://github.com/devkitPro/pacman-packages
 
 ### Building
 run `PATH=$DEVKITPRO/portlibs/switch/bin:$PATH make PLATFORM=SWITCH`
