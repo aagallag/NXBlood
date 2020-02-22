@@ -397,6 +397,9 @@ endif
 # Joystick options
 ALLJOYSTICKS := 0
 
+# Joystick options
+ALLJOYSTICKS := 0
+
 # Debugging/Build options
 FORCEDEBUG := 0
 KRANDDEBUG := 0

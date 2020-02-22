@@ -1,10 +1,11 @@
 # NXBlood
 a homebrew port of NBLood for the Nintendo Switch
 
-## NBlood
 
-### Installing
+## NBlood
 1. put the NRO into the switch directory
+2. make a folder called nblood in the root of the SD card
+3. Copy the following files from Blood 1.21 to nblood folder:
 2. make a folder called nblood in the root of the SD card
 3. Copy the following files from Blood 1.21 to nblood folder:
 
@@ -28,6 +29,16 @@ a homebrew port of NBLood for the Nintendo Switch
 4. Copy nblood.pk3 from this repo into the nblood folder
 5. Optionally if you want to use CD audio tracks instead of MIDI, provide FLAC/OGG recordings in following format: bloodXX.flac/ogg, where XX is track number. Make sure to enable Redbook audio option in sound menu.
 6. Launch NXBlood
+
+## Building NXBlood
+### Requirements
+Make sure to have setup the devkitarm toolchain with devkita64
+install `switch-sdl2 switch-sdl2_mixer switch-libogg switch-libvorbis switch-flac` over pacman
+
+### Building
+run `PATH=$DEVKITPRO/portlibs/switch/bin:$PATH make PLATFORM=SWITCH`
+
+for various compilation options check the the [EDuke32 Wiki]
 
 ## Building NXBlood
 ### Requirements

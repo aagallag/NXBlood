@@ -1048,6 +1048,30 @@ int32_t initinput(void)
         joyScanDevices();
         }
 #else
+
+            if (joydev[j])
+            {
+                SDL_JoystickEventState(SDL_ENABLE);
+                inputdevices |= 4;
+
+                // KEEPINSYNC duke3d/src/gamedefs.h, mact/include/_control.h
+                joystick.numAxes = min(9, SDL_JoystickNumAxes(joydev[j]));
+                joystick.numButtons = min(32, SDL_JoystickNumButtons(joydev[j]));
+                joystick.numHats = min((36-joystick.numButtons)/4,SDL_JoystickNumHats(joydev[j]));
+                initprintf("  joystick %d has %d axes, %d buttons, and %d hat(s).\n", j + 1, joystick.numAxes, joystick.numButtons, joystick.numHats);
+
+                joystick.pAxis = (int32_t *)Xcalloc(joystick.numAxes, sizeof(int32_t));
+
+                if (joystick.numHats)
+                    joystick.pHat = (int32_t *)Xcalloc(joystick.numHats, sizeof(int32_t));
+
+                for (int f = 0; f < joystick.numHats; f++) joystick.pHat[f] = -1;  // centre
+
+                joydead = (uint16_t *)Xcalloc(joystick.numAxes, sizeof(uint16_t));
+                joysatur = (uint16_t *)Xcalloc(joystick.numAxes, sizeof(uint16_t));
+            }
+        }
+#else
         i = SDL_NumJoysticks();
         initprintf("%d joystick(s) found\n", i);
 

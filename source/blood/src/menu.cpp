@@ -691,6 +691,24 @@ CGameMenuItemSlider itemOptionsControlJoystick2XScale("X-SCALE:", 3, 66, 115, 18
 CGameMenuItemSlider itemOptionsControlJoystick2YScale("Y-SCALE:", 3, 66, 125, 180, (int*)&JoystickAnalogueScale[3], 0, 65536, 1024, SetJoystick2YScale, -1, -1, kMenuSliderQ16);
 CGameMenuItemZBool itemOptionsControlJoystick2Reset("RESET", 3, 66, 135, 180, false, ResetJoystick2, "", "");
 
+void SetJoystick1XScale(CGameMenuItemSlider *pItem);
+void SetJoystick1YScale(CGameMenuItemSlider *pItem);
+void SetJoystick2XScale(CGameMenuItemSlider *pItem);
+void SetJoystick2YScale(CGameMenuItemSlider *pItem);
+
+void ResetJoystick1(CGameMenuItemZBool *pItem);
+void ResetJoystick2(CGameMenuItemZBool *pItem);
+
+CGameMenuItemTitle itemOptionsControlJoystickTitle("GAMEPAD SETUP", 1, 160, 20, 2038);
+CGameMenuItemText itemOptionsJoystick1Text("Left Stick", 3, 66, 60, 0);
+CGameMenuItemSlider itemOptionsControlJoystick1XScale("X-SCALE:", 3, 66, 70, 180, (int*)&JoystickAnalogueScale[0], 0, 65536, 1024, SetJoystick1XScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemSlider itemOptionsControlJoystick1YScale("Y-SCALE:", 3, 66, 80, 180, (int*)&JoystickAnalogueScale[1], 0, 65536, 1024, SetJoystick1YScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemZBool itemOptionsControlJoystick1Reset("RESET", 3, 66, 90, 180, false, ResetJoystick1, "", "");
+CGameMenuItemText itemOptionsJoystick2Text("Right Stick", 3, 66, 105, 0);
+CGameMenuItemSlider itemOptionsControlJoystick2XScale("X-SCALE:", 3, 66, 115, 180, (int*)&JoystickAnalogueScale[2], 0, 65536, 1024, SetJoystick2XScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemSlider itemOptionsControlJoystick2YScale("Y-SCALE:", 3, 66, 125, 180, (int*)&JoystickAnalogueScale[3], 0, 65536, 1024, SetJoystick2YScale, -1, -1, kMenuSliderQ16);
+CGameMenuItemZBool itemOptionsControlJoystick2Reset("RESET", 3, 66, 135, 180, false, ResetJoystick2, "", "");
+
 void SetupNetworkMenu(void);
 void SetupNetworkHostMenu(CGameMenuItemChain *pItem);
 void SetupNetworkJoinMenu(CGameMenuItemChain *pItem);
